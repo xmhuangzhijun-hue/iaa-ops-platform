@@ -78,7 +78,6 @@ jobs:
       PARITY_PYTHON_DATABASE_URL: postgresql+psycopg://iaa@127.0.0.1:5432/iaa_ops_parity
       PARITY_JAVA_DATABASE_URL: jdbc:postgresql://127.0.0.1:5432/iaa_ops_parity
       DATABASE_USER: iaa
-      PARITY_LOG_DIR: ${{ runner.temp }}/iaa-parity
     steps:
       - uses: actions/checkout@v4
       - uses: astral-sh/setup-uv@v6
@@ -104,6 +103,8 @@ jobs:
           chmod +x gradlew
           ./gradlew bootJar --no-daemon
       - name: 双服务同库对照与契约校验
+        env:
+          PARITY_LOG_DIR: ${{ runner.temp }}/iaa-parity
         run: bash tools/parity/run-ci.sh
       - name: 保存服务与对照日志
         if: always()
