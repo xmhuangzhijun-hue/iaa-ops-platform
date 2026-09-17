@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>IAA 投放运营中台</title>
+    <script>
+      // 首帧前按已保存的主题设置明暗，避免闪烁；读取失败时跟随系统。
+      try {
+        var saved = JSON.parse(localStorage.getItem("iaa.theme") || "null");
+        var mode = saved && saved.mode ? saved.mode : "system";
+        var dark = mode === "dark" || (mode === "system" && matchMedia("(prefers-color-scheme: dark)").matches);
+        document.documentElement.dataset.mode = dark ? "dark" : "light";
+      } catch (error) {
+        document.documentElement.dataset.mode = "light";
+      }
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

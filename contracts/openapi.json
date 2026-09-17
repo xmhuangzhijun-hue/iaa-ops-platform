@@ -1,0 +1,5281 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "IAA 投放运营中台 API",
+    "description": "IAA 投放运营中台 Java 业务服务契约；示例数据均为虚构。模型暂由 FastAPI 导出，x-implementation 表示 Java 状态；x-reference-implementation 保留 Python 对照服务的实际状态。",
+    "version": "1.0.0-rc.1"
+  },
+  "paths": {
+    "/api/v1/health": {
+      "get": {
+        "tags": [
+          "系统"
+        ],
+        "summary": "健康检查",
+        "operationId": "getHealth",
+        "responses": {
+          "200": {
+            "description": "服务可用",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Health"
+                },
+                "examples": {
+                  "demo": {
+                    "summary": "开发环境",
+                    "value": {
+                      "status": "ok",
+                      "version": "0.1.0",
+                      "environment": "development"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [],
+        "x-requirements": [
+          "IAA-REQ-005"
+        ],
+        "x-screens": [],
+        "x-fields": [],
+        "x-implementation": "implemented",
+        "x-reference-implementation": {
+          "runtime": "FastAPI",
+          "status": "implemented"
+        },
+        "x-implementation-source": "backend-java/src/main/java/com/iaaops/system/SystemController.java"
+      }
+    },
+    "/api/v1/metrics": {
+      "get": {
+        "tags": [
+          "指标"
+        ],
+        "summary": "指标口径目录",
+        "description": "返回全部基础指标与派生指标的名称、公式与精度；与后端计算共用同一份定义。",
+        "operationId": "listMetrics",
+        "responses": {
+          "200": {
+            "description": "指标目录",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MetricCatalog"
+                },
+                "examples": {
+                  "demo": {
+                    "summary": "全部指标",
+                    "value": {
+                      "items": [
+                        {
+                          "key": "cost",
+                          "label": "消耗",
+                          "kind": "base",
+                          "unit": "money",
+                          "formula": "sum(cost)",
+                          "description": "媒体平台同步的投放消耗。",
+                          "precision": 2
+                        },
+                        {
+                          "key": "revenue",
+                          "label": "预估收益",
+                          "kind": "base",
+                          "unit": "money",
+                          "formula": "sum(revenue)",
+                          "description": "客户端变现的预估收益。",
+                          "precision": 2
+                        },
+                        {
+                          "key": "impressions",
+                          "label": "曝光",
+                          "kind": "base",
+                          "unit": "count",
+                          "formula": "sum(impressions)",
+                          "description": "媒体平台同步的曝光次数。",
+                          "precision": 0
+                        },
+                        {
+                          "key": "clicks",
+                          "label": "点击",
+                          "kind": "base",
+                          "unit": "count",
+                          "formula": "sum(clicks)",
+                          "description": "媒体平台同步的点击次数。",
+                          "precision": 0
+                        },
+                        {
+                          "key": "launches",
+                          "label": "启动数",
+                          "kind": "base",
+                          "unit": "count",
+                          "formula": "sum(launches)",
+                          "description": "快应用被拉起的次数。",
+                          "precision": 0
+                        },
+                        {
+                          "key": "callbacks",
+                          "label": "回传数",
+                          "kind": "base",
+                          "unit": "count",
+                          "formula": "sum(callbacks)",
+                          "description": "按回传规则回传给媒体的转化数。",
+                          "precision": 0
+                        },
+                        {
+                          "key": "conversions",
+                          "label": "转化数",
+                          "kind": "base",
+                          "unit": "count",
+                          "formula": "sum(conversions)",
+                          "description": "满足转化规则的转化数。",
+                          "precision": 0
+                        },
+                        {
+                          "key": "roi",
+                          "label": "ROI",
+                          "kind": "derived",
+                          "unit": "ratio",
+                          "formula": "revenue / cost",
+                          "description": "预估收益与消耗之比；汇总行用总收益 / 总消耗重算。",
+                          "precision": 3
+                        },
+                        {
+                          "key": "ctr",
+                          "label": "点击率",
+                          "kind": "derived",
+                          "unit": "ratio",
+                          "formula": "clicks / impressions",
+                          "description": "曝光到点击的比例。",
+                          "precision": 4
+                        },
+                        {
+                          "key": "cpm",
+                          "label": "CPM",
+                          "kind": "derived",
+                          "unit": "per_unit",
+                          "formula": "cost / impressions × 1000",
+                          "description": "千次曝光成本。",
+                          "precision": 2
+                        },
+                        {
+                          "key": "cpc",
+                          "label": "CPC",
+                          "kind": "derived",
+                          "unit": "per_unit",
+                          "formula": "cost / clicks",
+                          "description": "每次点击成本。",
+                          "precision": 4
+                        },
+                        {
+                          "key": "click_arpu",
+                          "label": "点击 ARPU",
+                          "kind": "derived",
+                          "unit": "per_unit",
+                          "formula": "revenue / clicks",
+                          "description": "每次点击带来的预估收益。",
+                          "precision": 4
+                        },
+                        {
+                          "key": "launch_rate",
+                          "label": "启动率",
+                          "kind": "derived",
+                          "unit": "ratio",
+                          "formula": "launches / clicks",
+                          "description": "点击到启动的跳转率。",
+                          "precision": 4
+                        },
+                        {
+                          "key": "cvr",
+                          "label": "转化率",
+                          "kind": "derived",
+                          "unit": "ratio",
+                          "formula": "conversions / clicks",
+                          "description": "点击到转化的比例。",
+                          "precision": 4
+                        },
+                        {
+                          "key": "conversion_cost",
+                          "label": "转化成本",
+                          "kind": "derived",
+                          "unit": "per_unit",
+                          "formula": "cost / conversions",
+                          "description": "每次转化对应的消耗。",
+                          "precision": 4
+                        },
+                        {
+                          "key": "callback_cost",
+                          "label": "回传成本",
+                          "kind": "derived",
+                          "unit": "per_unit",
+                          "formula": "cost / callbacks",
+                          "description": "每次回传对应的消耗。",
+                          "precision": 4
+                        },
+                        {
+                          "key": "launch_callback_rate",
+                          "label": "启动→回传率",
+                          "kind": "derived",
+                          "unit": "ratio",
+                          "formula": "callbacks / launches",
+                          "description": "启动到回传的比例。",
+                          "precision": 4
+                        },
+                        {
+                          "key": "revenue_gap",
+                          "label": "回收差额",
+                          "kind": "derived",
+                          "unit": "money",
+                          "formula": "revenue - cost",
+                          "description": "预估收益减消耗。",
+                          "precision": 2
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [],
+        "x-requirements": [
+          "IAA-REQ-003"
+        ],
+        "x-screens": [
+          "metric-catalog",
+          "report-aggregate"
+        ],
+        "x-fields": [
+          "cost",
+          "revenue",
+          "roi",
+          "cpc",
+          "click_arpu"
+        ],
+        "x-implementation": "implemented",
+        "x-reference-implementation": {
+          "runtime": "FastAPI",
+          "status": "implemented"
+        },
+        "x-implementation-source": "backend-java/src/main/java/com/iaaops/reporting/web/MetricCatalogController.java"
+      }
+    },
+    "/api/v1/auth/login": {
+      "post": {
+        "tags": [
+          "认证与偏好"
+        ],
+        "summary": "账号密码登录",
+        "description": "校验账号口令，签发短期访问令牌与刷新令牌。账号不存在、口令错误、账号停用及锁定统一返回 INVALID_CREDENTIALS。Java 业务服务按账号及来源 IP 限制失败登录，锁定期内正确口令也拒绝；成功登录或改密提交后清零账号与当前 IP 的失败计数。",
+        "operationId": "login",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginRequest"
+              },
+              "examples": {
+                "demo": {
+                  "summary": "演示账号登录",
+                  "value": {
+                    "username": "demo.operator",
+                    "password": "<密码>"
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "登录成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TokenPair"
+                },
+                "examples": {
+                  "demo": {
+                    "summary": "登录成功",
+                    "value": {
+                      "access_token": "<access-token>",
+                      "refresh_token": "<refresh-token>",
+                      "token_type": "bearer",
+                      "expires_in": 900,
+                      "must_change_password": false
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "未登录或令牌已失效",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "请求参数校验失败",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "security": [],
+        "x-requirements": [
+          "IAA-REQ-001"
+        ],
+        "x-screens": [
+          "login"
+        ],
+        "x-fields": [
+          "username"
+        ],
+        "x-implementation": "implemented",
+        "x-reference-implementation": {
+          "runtime": "FastAPI",
+          "status": "implemented"
+        },
+        "x-implementation-source": "backend-java/src/main/java/com/iaaops/iam/web/AuthController.java"
+      }
+    },
+    "/api/v1/auth/refresh": {
+      "post": {
+        "tags": [
+          "认证与偏好"
+        ],
+        "summary": "刷新访问令牌",
+        "description": "用刷新令牌换取新的令牌对，旧刷新令牌随即失效；已失效的刷新令牌再次出现时吊销该账号全部刷新令牌。",
+        "operationId": "refreshToken",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RefreshRequest"
+              },
+              "examples": {
+                "demo": {
+                  "summary": "换发令牌",
+                  "value": {
+                    "refresh_token": "<refresh-token>"
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "已换发",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TokenPair"
+                },
+                "examples": {
+                  "demo": {
+                    "summary": "换发成功",
+                    "value": {
+                      "access_token": "<access-token>",
+                      "refresh_token": "<refresh-token>",
+                      "token_type": "bearer",
+                      "expires_in": 900,
+                      "must_change_password": false
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "未登录或令牌已失效",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "请求参数校验失败",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "security": [],
+        "x-requirements": [
+          "IAA-REQ-001"
+        ],
+        "x-screens": [],
+        "x-fields": [],
+        "x-implementation": "implemented",
+        "x-reference-implementation": {
+          "runtime": "FastAPI",
+          "status": "implemented"
+        },
+        "x-implementation-source": "backend-java/src/main/java/com/iaaops/iam/web/AuthController.java"
+      }
+    },
+    "/api/v1/auth/logout": {
+      "post": {
+        "tags": [
+          "认证与偏好"
+        ],
+        "summary": "退出登录",
+        "description": "吊销提交的刷新令牌。访问令牌无状态，最长 15 分钟后自然失效，前端退出时应同时丢弃。",
+        "operationId": "logout",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RefreshRequest"
+              },
+              "examples": {
+                "demo": {
+                  "summary": "退出当前会话",
+                  "value": {
+                    "refresh_token": "<refresh-token>"
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "204": {
+            "description": "已退出"
+          },
+          "422": {
+            "description": "请求参数校验失败",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "security": [],
+        "x-requirements": [
+          "IAA-REQ-001"
+        ],
+        "x-screens": [
+          "app-shell"
+        ],
+        "x-fields": [],
+        "x-implementation": "implemented",
+        "x-reference-implementation": {
+          "runtime": "FastAPI",
+          "status": "implemented"
+        },
+        "x-implementation-source": "backend-java/src/main/java/com/iaaops/iam/web/AuthController.java"
+      }
+    },
+    "/api/v1/auth/password": {
+      "post": {
+        "tags": [
+          "认证与偏好"
+        ],
+        "summary": "修改口令",
+        "description": "临时口令账号也可调用。成功后吊销该账号全部刷新令牌并签发新的令牌对。",
+        "operationId": "changePassword",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PasswordChange"
+              },
+              "examples": {
+                "demo": {
+                  "summary": "首次登录改密",
+                  "value": {
+                    "current_password": "<当前口令>",
+                    "new_password": "<至少十位的新口令>"
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "已修改",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TokenPair"
+                },
+                "examples": {
+                  "demo": {
+                    "summary": "修改成功",
+                    "value": {
+                      "access_token": "<access-token>",
+                      "refresh_token": "<refresh-token>",
+                      "token_type": "bearer",
+                      "expires_in": 900,
+                      "must_change_password": false
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "未登录或令牌已失效",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "请求参数校验失败",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "x-requirements": [
+          "IAA-REQ-001"
+        ],
+        "x-screens": [
+          "login"
+        ],
+        "x-fields": [],
+        "x-implementation": "implemented",
+        "x-reference-implementation": {
+          "runtime": "FastAPI",
+          "status": "implemented"
+        },
+        "x-implementation-source": "backend-java/src/main/java/com/iaaops/iam/web/AuthController.java"
+      }
+    },
+    "/api/v1/auth/me": {
+      "get": {
+        "tags": [
+          "认证与偏好"
+        ],
+        "summary": "当前账号、权限与导航",
+        "description": "返回角色、权限、数据范围以及按权限裁剪后的导航分组。临时口令账号也可调用。",
+        "operationId": "getCurrentPrincipal",
+        "responses": {
+          "200": {
+            "description": "当前账号",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Principal"
+                },
+                "examples": {
+                  "demo": {
+                    "summary": "运营账号",
+                    "value": {
+                      "user_id": "usr_01",
+                      "username": "demo.operator",
+                      "display_name": "演示运营",
+                      "tenant_id": "tenant_demo",
+                      "roles": [
+                        "operator"
+                      ],
+                      "permissions": [
+                        "dashboard.read",
+                        "metrics.real"
+                      ],
+                      "data_scope": {
+                        "products": [
+                          "晴空天气",
+                          "脑力答题王"
+                        ]
+                      },
+                      "must_change_password": false,
+                      "visible_metrics": [
+                        "cost",
+                        "revenue",
+                        "impressions",
+                        "clicks",
+                        "launches",
+                        "callbacks",
+                        "conversions",
+                        "roi",
+                        "ctr",
+                        "cpm",
+                        "cpc",
+                        "click_arpu",
+                        "launch_rate",
+                        "cvr",
+                        "conversion_cost",
+                        "callback_cost",
+                        "launch_callback_rate",
+                        "revenue_gap"
+                      ],
+                      "navigation": [
+                        {
+                          "title": "看盘分析",
+                          "pages": [
+                            {
+                              "id": "report-aggregate",
+                              "title": "聚合",
+                              "route": "/analysis/aggregate"
+                            },
+                            {
+                              "id": "report-daily",
+                              "title": "分天明细",
+                              "route": "/analysis/daily"
+                            },
+                            {
+                              "id": "report-trend",
+                              "title": "趋势图",
+                              "route": "/analysis/trend"
+                            },
+                            {
+                              "id": "roi-anomalies",
+                              "title": "ROI 异常清单",
+                              "route": "/analysis/roi-anomalies"
+                            },
+                            {
+                              "id": "raw-detail",
+                              "title": "原始明细",
+                              "route": "/analysis/raw"
+                            }
+                          ]
+                        },
+                        {
+                          "title": "系统管理",
+                          "pages": [
+                            {
+                              "id": "metric-catalog",
+                              "title": "指标与字段说明",
+                              "route": "/system/metrics"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "未登录或令牌已失效",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "x-requirements": [
+          "IAA-REQ-001"
+        ],
+        "x-screens": [
+          "app-shell"
+        ],
+        "x-fields": [
+          "username",
+          "roles",
+          "permissions",
+          "data_scope"
+        ],
+        "x-implementation": "implemented",
+        "x-reference-implementation": {
+          "runtime": "FastAPI",
+          "status": "implemented"
+        },
+        "x-implementation-source": "backend-java/src/main/java/com/iaaops/iam/web/AuthController.java"
+      }
+    },
+    "/api/v1/me/preferences": {
+      "get": {
+        "tags": [
+          "认证与偏好"
+        ],
+        "summary": "读取账号界面偏好",
+        "description": "主题模式、主题预设与各页面列设置按账号保存，换设备后保持一致。从未保存时返回默认值且 revision 为 0。",
+        "operationId": "getPreferences",
+        "responses": {
+          "200": {
+            "description": "当前偏好",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Preferences"
+                },
+                "examples": {
+                  "demo": {
+                    "summary": "深色极光蓝",
+                    "value": {
+                      "theme_mode": "dark",
+                      "theme_preset": "aurora-blue",
+                      "table_columns": {
+                        "report-aggregate": [
+                          "product",
+                          "cost",
+                          "revenue",
+                          "roi",
+                          "cpc",
+                          "click_arpu"
+                        ]
+                      },
+                      "revision": 4
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "未登录或令牌已失效",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "无权限，或超出账号的数据范围",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "x-requirements": [
+          "IAA-REQ-004"
+        ],
+        "x-screens": [
+          "app-shell"
+        ],
+        "x-fields": [
+          "theme_mode",
+          "theme_preset",
+          "table_columns",
+          "revision"
+        ],
+        "x-implementation": "implemented",
+        "x-reference-implementation": {
+          "runtime": "FastAPI",
+          "status": "implemented"
+        },
+        "x-implementation-source": "backend-java/src/main/java/com/iaaops/iam/web/AuthController.java"
+      },
+      "put": {
+        "tags": [
+          "认证与偏好"
+        ],
+        "summary": "保存账号界面偏好",
+        "description": "带上最后读到的 revision；期间被其他设备修改则返回 409。",
+        "operationId": "updatePreferences",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PreferencesUpdate"
+              },
+              "examples": {
+                "demo": {
+                  "summary": "保存列设置",
+                  "value": {
+                    "theme_mode": "dark",
+                    "theme_preset": "aurora-blue",
+                    "table_columns": {
+                      "report-aggregate": [
+                        "product",
+                        "cost",
+                        "revenue",
+                        "roi",
+                        "cpc",
+                        "click_arpu"
+                      ]
+                    },
+                    "revision": 3
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "已保存",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Preferences"
+                },
+                "examples": {
+                  "demo": {
+                    "summary": "保存后版本 +1",
+                    "value": {
+                      "theme_mode": "dark",
+                      "theme_preset": "aurora-blue",
+                      "table_columns": {
+                        "report-aggregate": [
+                          "product",
+                          "cost",
+                          "revenue",
+                          "roi",
+                          "cpc",
+                          "click_arpu"
+                        ]
+                      },
+                      "revision": 4
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "未登录或令牌已失效",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "无权限，或超出账号的数据范围",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "版本已变化，请刷新后重试",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "请求参数校验失败",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "x-requirements": [
+          "IAA-REQ-004"
+        ],
+        "x-screens": [
+          "app-shell"
+        ],
+        "x-fields": [
+          "theme_mode",
+          "theme_preset",
+          "table_columns",
+          "revision"
+        ],
+        "x-implementation": "implemented",
+        "x-reference-implementation": {
+          "runtime": "FastAPI",
+          "status": "implemented"
+        },
+        "x-implementation-source": "backend-java/src/main/java/com/iaaops/iam/web/AuthController.java"
+      }
+    },
+    "/api/v1/filter-options": {
+      "get": {
+        "tags": [
+          "看盘分析"
+        ],
+        "summary": "筛选条可选值",
+        "description": "返回日期范围内、当前账号数据范围可见的媒体、产品、代理、账户与运营。",
+        "operationId": "getFilterOptions",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "date_from",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date",
+              "title": "Date From"
+            }
+          },
+          {
+            "name": "date_to",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date",
+              "title": "Date To"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "可选值",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FilterOptions"
+                },
+                "examples": {
+                  "demo": {
+                    "summary": "运营账号可见范围",
+                    "value": {
+                      "media": [
+                        {
+                          "value": "vivo",
+                          "label": "vivo"
+                        },
+                        {
+                          "value": "oppo",
+                          "label": "OPPO"
+                        }
+                      ],
+                      "products": [
+                        {
+                          "value": "晴空天气",
+                          "label": "晴空天气"
+                        },
+                        {
+                          "value": "脑力答题王",
+                          "label": "脑力答题王"
+                        }
+                      ],
+                      "agencies": [
+                        {
+                          "value": "星河代理",
+                          "label": "星河代理"
+                        },
+                        {
+                          "value": "蓝鲸代理",
+                          "label": "蓝鲸代理"
+                        }
+                      ],
+                      "accounts": [
+                        {
+                          "value": "vivo-demo-003",
+                          "label": "vivo-demo-003"
+                        },
+                        {
+                          "value": "vivo-demo-017",
+                          "label": "vivo-demo-017"
+                        }
+                      ],
+                      "operators": [
+                        {
+                          "value": "运营甲",
+                          "label": "运营甲"
+                        },
+                        {
+                          "value": "运营乙",
+                          "label": "运营乙"
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "未登录或令牌已失效",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "无权限，或超出账号的数据范围",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "请求参数校验失败",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "x-requirements": [
+          "IAA-REQ-002"
+        ],
+        "x-screens": [
+          "app-shell"
+        ],
+        "x-fields": [
+          "stat_date",
+          "media",
+          "product",
+          "agency",
+          "account",
+          "operator"
+        ],
+        "x-implementation": "implemented",
+        "x-reference-implementation": {
+          "runtime": "FastAPI",
+          "status": "implemented"
+        },
+        "x-implementation-source": "backend-java/src/main/java/com/iaaops/reporting/web/ReportController.java"
+      }
+    },
+    "/api/v1/reports/aggregate": {
+      "post": {
+        "tags": [
+          "看盘分析"
+        ],
+        "summary": "聚合查询",
+        "description": "按所选维度汇总；派生指标由汇总后的基础指标重算，合计行同理。结果受账号数据范围约束。",
+        "operationId": "queryAggregate",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReportQuery"
+              },
+              "examples": {
+                "demo": {
+                  "summary": "vivo 按产品聚合",
+                  "value": {
+                    "date_from": "2026-09-14",
+                    "date_to": "2026-09-15",
+                    "filters": {
+                      "media": [
+                        "vivo"
+                      ]
+                    },
+                    "metrics": [
+                      "cost",
+                      "revenue",
+                      "roi",
+                      "cpc",
+                      "click_arpu"
+                    ],
+                    "sort": [
+                      {
+                        "field": "cost"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "聚合结果",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReportResult"
+                },
+                "examples": {
+                  "demo": {
+                    "summary": "按产品聚合",
+                    "value": {
+                      "columns": [
+                        {
+                          "key": "product",
+                          "label": "产品",
+                          "kind": "dimension"
+                        },
+                        {
+                          "key": "cost",
+                          "label": "消耗",
+                          "kind": "base",
+                          "unit": "money",
+                          "precision": 2
+                        },
+                        {
+                          "key": "revenue",
+                          "label": "预估收益",
+                          "kind": "base",
+                          "unit": "money",
+                          "precision": 2
+                        },
+                        {
+                          "key": "roi",
+                          "label": "ROI",
+                          "kind": "derived",
+                          "unit": "ratio",
+                          "precision": 3
+                        },
+                        {
+                          "key": "cpc",
+                          "label": "CPC",
+                          "kind": "derived",
+                          "unit": "per_unit",
+                          "precision": 4
+                        },
+                        {
+                          "key": "click_arpu",
+                          "label": "点击 ARPU",
+                          "kind": "derived",
+                          "unit": "per_unit",
+                          "precision": 4
+                        }
+                      ],
+                      "rows": [
+                        {
+                          "product": "晴空天气",
+                          "cost": 12840.5,
+                          "revenue": 14125.3,
+                          "roi": 1.1,
+                          "cpc": 0.1333,
+                          "click_arpu": 0.1467
+                        },
+                        {
+                          "product": "脑力答题王",
+                          "cost": 8420.0,
+                          "revenue": 7910.6,
+                          "roi": 0.94,
+                          "cpc": 0.1401,
+                          "click_arpu": 0.1316
+                        }
+                      ],
+                      "totals": {
+                        "cost": 21260.5,
+                        "revenue": 22035.9,
+                        "roi": 1.036,
+                        "cpc": 0.1359,
+                        "click_arpu": 0.1409
+                      },
+                      "page": 1,
+                      "page_size": 50,
+                      "total_rows": 2,
+                      "data_as_of": "2026-09-15T23:50:00+08:00"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "未登录或令牌已失效",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "无权限，或超出账号的数据范围",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "请求参数校验失败",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "x-requirements": [
+          "IAA-REQ-002"
+        ],
+        "x-screens": [
+          "report-aggregate"
+        ],
+        "x-fields": [
+          "stat_date",
+          "media",
+          "product",
+          "agency",
+          "account",
+          "operator",
+          "cost",
+          "revenue",
+          "clicks",
+          "roi",
+          "cpc",
+          "click_arpu"
+        ],
+        "x-implementation": "implemented",
+        "x-reference-implementation": {
+          "runtime": "FastAPI",
+          "status": "implemented"
+        },
+        "x-implementation-source": "backend-java/src/main/java/com/iaaops/reporting/web/ReportController.java"
+      }
+    },
+    "/api/v1/reports/daily": {
+      "post": {
+        "tags": [
+          "看盘分析"
+        ],
+        "summary": "分天明细",
+        "description": "在聚合维度前固定加入日期维度，便于逐日对比；与聚合共用同一筛选与口径。",
+        "operationId": "queryDaily",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReportQuery"
+              },
+              "examples": {
+                "demo": {
+                  "summary": "近两天按产品",
+                  "value": {
+                    "date_from": "2026-09-14",
+                    "date_to": "2026-09-15",
+                    "filters": {
+                      "media": [
+                        "vivo"
+                      ]
+                    },
+                    "group_by": [
+                      "stat_date",
+                      "product"
+                    ],
+                    "metrics": [
+                      "cost",
+                      "revenue",
+                      "roi"
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "分天结果",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReportResult"
+                },
+                "examples": {
+                  "demo": {
+                    "summary": "按日期与产品",
+                    "value": {
+                      "columns": [
+                        {
+                          "key": "stat_date",
+                          "label": "日期",
+                          "kind": "dimension"
+                        },
+                        {
+                          "key": "product",
+                          "label": "产品",
+                          "kind": "dimension"
+                        },
+                        {
+                          "key": "cost",
+                          "label": "消耗",
+                          "kind": "base",
+                          "unit": "money",
+                          "precision": 2
+                        },
+                        {
+                          "key": "revenue",
+                          "label": "预估收益",
+                          "kind": "base",
+                          "unit": "money",
+                          "precision": 2
+                        },
+                        {
+                          "key": "roi",
+                          "label": "ROI",
+                          "kind": "derived",
+                          "unit": "ratio",
+                          "precision": 3
+                        }
+                      ],
+                      "rows": [
+                        {
+                          "stat_date": "2026-09-14",
+                          "product": "晴空天气",
+                          "cost": 6120.4,
+                          "revenue": 6905.1,
+                          "roi": 1.128
+                        },
+                        {
+                          "stat_date": "2026-09-15",
+                          "product": "晴空天气",
+                          "cost": 6720.1,
+                          "revenue": 7220.2,
+                          "roi": 1.074
+                        },
+                        {
+                          "stat_date": "2026-09-14",
+                          "product": "脑力答题王",
+                          "cost": 4180.0,
+                          "revenue": 3620.6,
+                          "roi": 0.866
+                        },
+                        {
+                          "stat_date": "2026-09-15",
+                          "product": "脑力答题王",
+                          "cost": 4240.0,
+                          "revenue": 4290.0,
+                          "roi": 1.012
+                        }
+                      ],
+                      "totals": {
+                        "cost": 21260.5,
+                        "revenue": 22035.9,
+                        "roi": 1.036
+                      },
+                      "page": 1,
+                      "page_size": 50,
+                      "total_rows": 4,
+                      "data_as_of": "2026-09-15T23:50:00+08:00"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "未登录或令牌已失效",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "无权限，或超出账号的数据范围",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "请求参数校验失败",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "x-requirements": [
+          "IAA-REQ-002"
+        ],
+        "x-screens": [
+          "report-daily"
+        ],
+        "x-fields": [
+          "stat_date",
+          "media",
+          "product",
+          "agency",
+          "account",
+          "operator",
+          "cost",
+          "revenue",
+          "clicks",
+          "roi",
+          "cpc",
+          "click_arpu"
+        ],
+        "x-implementation": "implemented",
+        "x-reference-implementation": {
+          "runtime": "FastAPI",
+          "status": "implemented"
+        },
+        "x-implementation-source": "backend-java/src/main/java/com/iaaops/reporting/web/ReportController.java"
+      }
+    },
+    "/api/v1/reports/trend": {
+      "post": {
+        "tags": [
+          "看盘分析"
+        ],
+        "summary": "趋势序列",
+        "description": "按天或小时输出指标序列，可按一个维度拆成最多 8 条线，其余合并为「其他」。按小时时跨度不超过 7 天。",
+        "operationId": "queryTrend",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TrendQuery"
+              },
+              "examples": {
+                "demo": {
+                  "summary": "按天看消耗与 ROI",
+                  "value": {
+                    "date_from": "2026-09-14",
+                    "date_to": "2026-09-15",
+                    "filters": {
+                      "media": [
+                        "vivo"
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "趋势序列",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TrendResult"
+                },
+                "examples": {
+                  "demo": {
+                    "summary": "消耗与 ROI",
+                    "value": {
+                      "metrics": [
+                        "cost",
+                        "roi"
+                      ],
+                      "series": [
+                        {
+                          "key": "all",
+                          "label": "全部",
+                          "points": [
+                            {
+                              "bucket": "2026-09-14",
+                              "values": {
+                                "cost": 10300.4,
+                                "roi": 1.022
+                              }
+                            },
+                            {
+                              "bucket": "2026-09-15",
+                              "values": {
+                                "cost": 10960.1,
+                                "roi": 1.05
+                              }
+                            }
+                          ]
+                        }
+                      ],
+                      "data_as_of": "2026-09-15T23:50:00+08:00"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "未登录或令牌已失效",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "无权限，或超出账号的数据范围",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "请求参数校验失败",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "x-requirements": [
+          "IAA-REQ-002"
+        ],
+        "x-screens": [
+          "report-trend"
+        ],
+        "x-fields": [
+          "stat_date",
+          "stat_hour",
+          "cost",
+          "roi"
+        ],
+        "x-implementation": "implemented",
+        "x-reference-implementation": {
+          "runtime": "FastAPI",
+          "status": "implemented"
+        },
+        "x-implementation-source": "backend-java/src/main/java/com/iaaops/reporting/web/ReportController.java"
+      }
+    },
+    "/api/v1/reports/roi-anomalies": {
+      "post": {
+        "tags": [
+          "看盘分析"
+        ],
+        "summary": "ROI 异常清单",
+        "description": "列出消耗达到门槛且 ROI 低于阈值的对象；阈值与门槛随请求传入并回显在 rule 中。",
+        "operationId": "queryRoiAnomalies",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RoiAnomalyQuery"
+              },
+              "examples": {
+                "demo": {
+                  "summary": "ROI 低于 110%",
+                  "value": {
+                    "date_from": "2026-09-14",
+                    "date_to": "2026-09-15",
+                    "filters": {
+                      "media": [
+                        "vivo"
+                      ]
+                    },
+                    "group_by": [
+                      "account",
+                      "product"
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "异常清单",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RoiAnomalyResult"
+                },
+                "examples": {
+                  "demo": {
+                    "summary": "账户维度异常",
+                    "value": {
+                      "rule": "ROI < 110% 且消耗 ≥ 200",
+                      "items": [
+                        {
+                          "dimensions": {
+                            "account": "vivo-demo-017",
+                            "product": "脑力答题王"
+                          },
+                          "cost": 8420.0,
+                          "revenue": 7910.6,
+                          "roi": 0.94,
+                          "reason": "ROI 94.0% 低于 110%"
+                        }
+                      ],
+                      "data_as_of": "2026-09-15T23:50:00+08:00"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "未登录或令牌已失效",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "无权限，或超出账号的数据范围",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "请求参数校验失败",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "x-requirements": [
+          "IAA-REQ-002"
+        ],
+        "x-screens": [
+          "roi-anomalies"
+        ],
+        "x-fields": [
+          "account",
+          "product",
+          "cost",
+          "revenue",
+          "roi"
+        ],
+        "x-implementation": "implemented",
+        "x-reference-implementation": {
+          "runtime": "FastAPI",
+          "status": "implemented"
+        },
+        "x-implementation-source": "backend-java/src/main/java/com/iaaops/reporting/web/ReportController.java"
+      }
+    },
+    "/api/v1/reports/raw": {
+      "post": {
+        "tags": [
+          "看盘分析"
+        ],
+        "summary": "原始明细",
+        "description": "不做汇总的入库明细，分页返回，用于核对导入数据。",
+        "operationId": "queryRawDetail",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RawDetailQuery"
+              },
+              "examples": {
+                "demo": {
+                  "summary": "搜索产品关键词",
+                  "value": {
+                    "date_from": "2026-09-15",
+                    "date_to": "2026-09-15",
+                    "filters": {
+                      "media": [
+                        "vivo"
+                      ]
+                    },
+                    "keyword": "晴空"
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "明细分页",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReportResult"
+                },
+                "examples": {
+                  "demo": {
+                    "summary": "单日明细",
+                    "value": {
+                      "columns": [
+                        {
+                          "key": "stat_date",
+                          "label": "日期",
+                          "kind": "dimension"
+                        },
+                        {
+                          "key": "stat_hour",
+                          "label": "小时",
+                          "kind": "dimension"
+                        },
+                        {
+                          "key": "account",
+                          "label": "账户",
+                          "kind": "dimension"
+                        },
+                        {
+                          "key": "product",
+                          "label": "产品",
+                          "kind": "dimension"
+                        },
+                        {
+                          "key": "campaign",
+                          "label": "推广计划",
+                          "kind": "dimension"
+                        },
+                        {
+                          "key": "cost",
+                          "label": "消耗",
+                          "kind": "base",
+                          "unit": "money",
+                          "precision": 2
+                        },
+                        {
+                          "key": "revenue",
+                          "label": "预估收益",
+                          "kind": "base",
+                          "unit": "money",
+                          "precision": 2
+                        },
+                        {
+                          "key": "clicks",
+                          "label": "点击",
+                          "kind": "base",
+                          "unit": "count",
+                          "precision": 0
+                        }
+                      ],
+                      "rows": [
+                        {
+                          "stat_date": "2026-09-14",
+                          "stat_hour": 10,
+                          "account": "vivo-demo-003",
+                          "product": "晴空天气",
+                          "campaign": "qk-weather-01",
+                          "cost": 6120.4,
+                          "revenue": 6905.1,
+                          "clicks": 46100
+                        },
+                        {
+                          "stat_date": "2026-09-15",
+                          "stat_hour": 10,
+                          "account": "vivo-demo-003",
+                          "product": "晴空天气",
+                          "campaign": "qk-weather-01",
+                          "cost": 6720.1,
+                          "revenue": 7220.2,
+                          "clicks": 50200
+                        },
+                        {
+                          "stat_date": "2026-09-14",
+                          "stat_hour": 10,
+                          "account": "vivo-demo-017",
+                          "product": "脑力答题王",
+                          "campaign": "brain-quiz-02",
+                          "cost": 4180.0,
+                          "revenue": 3620.6,
+                          "clicks": 30400
+                        },
+                        {
+                          "stat_date": "2026-09-15",
+                          "stat_hour": 10,
+                          "account": "vivo-demo-017",
+                          "product": "脑力答题王",
+                          "campaign": "brain-quiz-02",
+                          "cost": 4240.0,
+                          "revenue": 4290.0,
+                          "clicks": 29720
+                        }
+                      ],
+                      "totals": {
+                        "cost": 21260.5,
+                        "revenue": 22035.9,
+                        "clicks": 156420
+                      },
+                      "page": 1,
+                      "page_size": 100,
+                      "total_rows": 4,
+                      "data_as_of": "2026-09-15T23:50:00+08:00"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "未登录或令牌已失效",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "无权限，或超出账号的数据范围",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "请求参数校验失败",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "x-requirements": [
+          "IAA-REQ-002"
+        ],
+        "x-screens": [
+          "raw-detail"
+        ],
+        "x-fields": [
+          "stat_date",
+          "media",
+          "product",
+          "agency",
+          "account",
+          "operator",
+          "stat_hour",
+          "campaign",
+          "cost",
+          "revenue",
+          "clicks"
+        ],
+        "x-implementation": "implemented",
+        "x-reference-implementation": {
+          "runtime": "FastAPI",
+          "status": "implemented"
+        },
+        "x-implementation-source": "backend-java/src/main/java/com/iaaops/reporting/web/ReportController.java"
+      }
+    },
+    "/api/v1/reports/export": {
+      "post": {
+        "tags": [
+          "看盘分析"
+        ],
+        "summary": "导出 CSV",
+        "description": "与页面使用同一查询与数据范围生成 CSV（UTF-8 带 BOM），导出结果与屏幕所见一致。原始明细导出需要真实口径权限。",
+        "operationId": "exportReport",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "view",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "enum": [
+                "aggregate",
+                "daily",
+                "raw"
+              ],
+              "type": "string",
+              "description": "导出哪个视图",
+              "title": "View"
+            },
+            "description": "导出哪个视图"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReportQuery"
+              },
+              "examples": {
+                "demo": {
+                  "summary": "导出当前聚合",
+                  "value": {
+                    "date_from": "2026-09-14",
+                    "date_to": "2026-09-15",
+                    "filters": {
+                      "media": [
+                        "vivo"
+                      ]
+                    },
+                    "metrics": [
+                      "cost",
+                      "revenue",
+                      "roi",
+                      "cpc",
+                      "click_arpu"
+                    ],
+                    "sort": [
+                      {
+                        "field": "cost"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "CSV 文件",
+            "content": {
+              "text/csv": {
+                "schema": {
+                  "type": "string"
+                },
+                "examples": {
+                  "demo": {
+                    "summary": "聚合导出",
+                    "value": "产品,消耗,预估收益,ROI\n晴空天气,12840.50,14125.30,1.100\n脑力答题王,8420.00,7910.60,0.939\n"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "未登录或令牌已失效",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "无权限，或超出账号的数据范围",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "请求参数校验失败",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "x-requirements": [
+          "IAA-REQ-002"
+        ],
+        "x-screens": [
+          "report-aggregate",
+          "report-daily",
+          "raw-detail"
+        ],
+        "x-fields": [
+          "stat_date",
+          "media",
+          "product",
+          "agency",
+          "account",
+          "operator",
+          "cost",
+          "revenue",
+          "clicks",
+          "roi",
+          "cpc",
+          "click_arpu"
+        ],
+        "x-implementation": "implemented",
+        "x-reference-implementation": {
+          "runtime": "FastAPI",
+          "status": "implemented"
+        },
+        "x-implementation-source": "backend-java/src/main/java/com/iaaops/reporting/web/ReportController.java"
+      }
+    },
+    "/api/v1/mappings/accounts": {
+      "get": {
+        "tags": [
+          "映射管理"
+        ],
+        "summary": "账户归属映射列表",
+        "operationId": "listAccountMappings",
+        "parameters": [
+          {
+            "name": "media",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "maxLength": 32
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Media"
+            }
+          },
+          {
+            "name": "keyword",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "maxLength": 100
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Keyword"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "default": 1,
+              "title": "Page"
+            }
+          },
+          {
+            "name": "page_size",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 200,
+              "minimum": 1,
+              "default": 50,
+              "title": "Page Size"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "映射分页",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AccountMappingPage"
+                },
+                "examples": {
+                  "demo": {
+                    "summary": "两条映射",
+                    "value": {
+                      "items": [
+                        {
+                          "account": "vivo-demo-003",
+                          "media": "vivo",
+                          "agency": "星河代理",
+                          "product": "晴空天气",
+                          "operator": "运营甲",
+                          "revision": 5
+                        },
+                        {
+                          "account": "vivo-demo-017",
+                          "media": "vivo",
+                          "agency": "蓝鲸代理",
+                          "product": "脑力答题王",
+                          "operator": "运营乙",
+                          "revision": 2
+                        }
+                      ],
+                      "total": 2
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "未登录或令牌已失效",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "无权限，或超出账号的数据范围",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "请求参数校验失败",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "x-requirements": [
+          "IAA-REQ-003"
+        ],
+        "x-screens": [
+          "mapping-manage"
+        ],
+        "x-fields": [
+          "account",
+          "media",
+          "agency",
+          "product",
+          "operator",
+          "revision"
+        ],
+        "x-implementation": "implemented",
+        "x-reference-implementation": {
+          "runtime": "FastAPI",
+          "status": "planned"
+        },
+        "x-implementation-source": "backend-java/src/main/java/com/iaaops/mapping/web/MappingController.java"
+      },
+      "put": {
+        "tags": [
+          "映射管理"
+        ],
+        "summary": "批量新增或修改映射",
+        "description": "逐条比对 revision；任一条版本已变化则整批不写入并返回 409。写入记审计日志。",
+        "operationId": "upsertAccountMappings",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AccountMappingUpsert"
+              },
+              "examples": {
+                "demo": {
+                  "summary": "改运营并新增账户",
+                  "value": {
+                    "items": [
+                      {
+                        "account": "vivo-demo-017",
+                        "media": "vivo",
+                        "agency": "蓝鲸代理",
+                        "product": "脑力答题王",
+                        "operator": "运营甲",
+                        "revision": 2
+                      },
+                      {
+                        "account": "vivo-demo-021",
+                        "media": "vivo",
+                        "agency": "蓝鲸代理",
+                        "product": "晴空天气",
+                        "operator": "运营乙"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "写入结果",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UpsertResult"
+                },
+                "examples": {
+                  "demo": {
+                    "summary": "新增 1 条，修改 1 条",
+                    "value": {
+                      "created": 1,
+                      "updated": 1,
+                      "unchanged": 0
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "未登录或令牌已失效",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "无权限，或超出账号的数据范围",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "版本已变化，请刷新后重试",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "请求参数校验失败",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "x-requirements": [
+          "IAA-REQ-003"
+        ],
+        "x-screens": [
+          "mapping-manage"
+        ],
+        "x-fields": [
+          "account",
+          "media",
+          "agency",
+          "product",
+          "operator",
+          "revision"
+        ],
+        "x-implementation": "implemented",
+        "x-reference-implementation": {
+          "runtime": "FastAPI",
+          "status": "planned"
+        },
+        "x-implementation-source": "backend-java/src/main/java/com/iaaops/mapping/web/MappingController.java"
+      }
+    },
+    "/api/v1/imports": {
+      "post": {
+        "tags": [
+          "数据导入"
+        ],
+        "summary": "上传媒体导出表",
+        "description": "解析后按文件覆盖的日期整天替换入库，重复上传同一天不会累加。异步处理，返回任务。",
+        "operationId": "createImport",
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_createImport"
+              },
+              "examples": {
+                "demo": {
+                  "summary": "上传 vivo 明细",
+                  "value": {
+                    "media": "vivo",
+                    "file": "（二进制 .xlsx 文件）"
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "202": {
+            "description": "已受理",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ImportTask"
+                },
+                "examples": {
+                  "demo": {
+                    "summary": "导入完成的任务",
+                    "value": {
+                      "id": "imp_20260916_001",
+                      "media": "vivo",
+                      "file_name": "vivo-明细-20260915.xlsx",
+                      "status": "succeeded",
+                      "stat_dates": [
+                        "2026-09-15"
+                      ],
+                      "rows_total": 2328,
+                      "rows_replaced": 2310,
+                      "errors": [],
+                      "created_at": "2026-09-16T09:12:00+08:00",
+                      "finished_at": "2026-09-16T09:12:41+08:00"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "未登录或令牌已失效",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "无权限，或超出账号的数据范围",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "上传文件超过大小限制",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "请求参数校验失败",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "x-requirements": [
+          "IAA-REQ-003"
+        ],
+        "x-screens": [
+          "data-import"
+        ],
+        "x-fields": [
+          "media",
+          "stat_date",
+          "import_status"
+        ],
+        "x-implementation": "implemented",
+        "x-reference-implementation": {
+          "runtime": "FastAPI",
+          "status": "planned"
+        },
+        "x-implementation-source": "backend-java/src/main/java/com/iaaops/ingestion/web/ImportController.java"
+      }
+    },
+    "/api/v1/imports/{import_id}": {
+      "get": {
+        "tags": [
+          "数据导入"
+        ],
+        "summary": "查询导入任务",
+        "operationId": "getImport",
+        "parameters": [
+          {
+            "name": "import_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "maxLength": 64,
+              "title": "Import Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "任务状态",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ImportTask"
+                },
+                "examples": {
+                  "demo": {
+                    "summary": "已完成",
+                    "value": {
+                      "id": "imp_20260916_001",
+                      "media": "vivo",
+                      "file_name": "vivo-明细-20260915.xlsx",
+                      "status": "succeeded",
+                      "stat_dates": [
+                        "2026-09-15"
+                      ],
+                      "rows_total": 2328,
+                      "rows_replaced": 2310,
+                      "errors": [],
+                      "created_at": "2026-09-16T09:12:00+08:00",
+                      "finished_at": "2026-09-16T09:12:41+08:00"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "未登录或令牌已失效",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "无权限，或超出账号的数据范围",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "对象不存在",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "请求参数校验失败",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "x-requirements": [
+          "IAA-REQ-003"
+        ],
+        "x-screens": [
+          "data-import"
+        ],
+        "x-fields": [
+          "import_status",
+          "stat_date"
+        ],
+        "x-implementation": "implemented",
+        "x-reference-implementation": {
+          "runtime": "FastAPI",
+          "status": "planned"
+        },
+        "x-implementation-source": "backend-java/src/main/java/com/iaaops/ingestion/web/ImportController.java"
+      }
+    },
+    "/api/v1/users": {
+      "get": {
+        "tags": [
+          "用户与权限"
+        ],
+        "summary": "账号列表",
+        "description": "公司管理员看到本租户账号；代理管理员只看到本代理下的账号。",
+        "operationId": "listUsers",
+        "parameters": [
+          {
+            "name": "keyword",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "maxLength": 64
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Keyword"
+            }
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "enum": [
+                    "active",
+                    "disabled"
+                  ],
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Status"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "default": 1,
+              "title": "Page"
+            }
+          },
+          {
+            "name": "page_size",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 200,
+              "minimum": 1,
+              "default": 50,
+              "title": "Page Size"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "账号分页",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserPage"
+                },
+                "examples": {
+                  "demo": {
+                    "summary": "一个运营账号",
+                    "value": {
+                      "items": [
+                        {
+                          "id": "usr_01",
+                          "username": "demo.operator",
+                          "display_name": "演示运营",
+                          "roles": [
+                            "operator"
+                          ],
+                          "status": "active",
+                          "data_scope": {
+                            "products": [
+                              "晴空天气",
+                              "脑力答题王"
+                            ]
+                          },
+                          "revision": 2
+                        }
+                      ],
+                      "total": 1
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "未登录或令牌已失效",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "无权限，或超出账号的数据范围",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "请求参数校验失败",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "x-requirements": [
+          "IAA-REQ-001",
+          "IAA-REQ-003"
+        ],
+        "x-screens": [
+          "user-manage"
+        ],
+        "x-fields": [
+          "username",
+          "roles",
+          "data_scope",
+          "revision"
+        ],
+        "x-implementation": "implemented",
+        "x-reference-implementation": {
+          "runtime": "FastAPI",
+          "status": "planned"
+        },
+        "x-implementation-source": "backend-java/src/main/java/com/iaaops/iam/web/UserAdminController.java"
+      },
+      "post": {
+        "tags": [
+          "用户与权限"
+        ],
+        "summary": "创建账号",
+        "description": "服务端生成一次性临时口令，只在本响应返回；不能授予超出操作者自身范围的角色或数据。",
+        "operationId": "createUser",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserCreate"
+              },
+              "examples": {
+                "demo": {
+                  "summary": "代理管理员",
+                  "value": {
+                    "username": "demo.agency",
+                    "display_name": "演示代理管理员",
+                    "roles": [
+                      "agency_admin"
+                    ],
+                    "data_scope": {
+                      "agencies": [
+                        "星河代理"
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "已创建",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserCreated"
+                },
+                "examples": {
+                  "demo": {
+                    "summary": "创建代理管理员",
+                    "value": {
+                      "user": {
+                        "id": "usr_02",
+                        "username": "demo.agency",
+                        "display_name": "演示代理管理员",
+                        "roles": [
+                          "agency_admin"
+                        ],
+                        "status": "active",
+                        "data_scope": {
+                          "agencies": [
+                            "星河代理"
+                          ]
+                        },
+                        "revision": 1
+                      },
+                      "one_time_password": "<仅本次返回的临时口令>",
+                      "must_change_password": true
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "未登录或令牌已失效",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "无权限，或超出账号的数据范围",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "版本已变化，请刷新后重试",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "请求参数校验失败",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "x-requirements": [
+          "IAA-REQ-001",
+          "IAA-REQ-003"
+        ],
+        "x-screens": [
+          "user-manage"
+        ],
+        "x-fields": [
+          "username",
+          "roles",
+          "data_scope",
+          "revision"
+        ],
+        "x-implementation": "implemented",
+        "x-reference-implementation": {
+          "runtime": "FastAPI",
+          "status": "planned"
+        },
+        "x-implementation-source": "backend-java/src/main/java/com/iaaops/iam/web/UserAdminController.java"
+      }
+    },
+    "/api/v1/users/{user_id}/roles": {
+      "put": {
+        "tags": [
+          "用户与权限"
+        ],
+        "summary": "修改角色与数据范围",
+        "description": "带 revision 防止覆盖他人修改；真实口径与对外口径权限不能同时授予。",
+        "operationId": "updateUserRoles",
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "maxLength": 64,
+              "title": "User Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserRolesUpdate"
+              },
+              "examples": {
+                "demo": {
+                  "summary": "限定产品范围",
+                  "value": {
+                    "roles": [
+                      "operator"
+                    ],
+                    "data_scope": {
+                      "products": [
+                        "晴空天气",
+                        "脑力答题王"
+                      ]
+                    },
+                    "revision": 2
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "已修改",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserSummary"
+                },
+                "examples": {
+                  "demo": {
+                    "summary": "改为运营",
+                    "value": {
+                      "id": "usr_01",
+                      "username": "demo.operator",
+                      "display_name": "演示运营",
+                      "roles": [
+                        "operator"
+                      ],
+                      "status": "active",
+                      "data_scope": {
+                        "products": [
+                          "晴空天气",
+                          "脑力答题王"
+                        ]
+                      },
+                      "revision": 3
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "未登录或令牌已失效",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "无权限，或超出账号的数据范围",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "对象不存在",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "版本已变化，请刷新后重试",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "请求参数校验失败",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "x-requirements": [
+          "IAA-REQ-001",
+          "IAA-REQ-003"
+        ],
+        "x-screens": [
+          "user-manage"
+        ],
+        "x-fields": [
+          "username",
+          "roles",
+          "data_scope",
+          "revision"
+        ],
+        "x-implementation": "implemented",
+        "x-reference-implementation": {
+          "runtime": "FastAPI",
+          "status": "planned"
+        },
+        "x-implementation-source": "backend-java/src/main/java/com/iaaops/iam/web/UserAdminController.java"
+      }
+    },
+    "/api/v1/audit-events": {
+      "get": {
+        "tags": [
+          "审计"
+        ],
+        "summary": "审计日志",
+        "description": "按时间倒序游标分页，记录映射、导入、账号与权限等写操作的前后值。",
+        "operationId": "listAuditEvents",
+        "parameters": [
+          {
+            "name": "action",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "maxLength": 64
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Action"
+            }
+          },
+          {
+            "name": "cursor",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "maxLength": 128
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Cursor"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 200,
+              "minimum": 1,
+              "default": 50,
+              "title": "Limit"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "审计分页",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuditEventPage"
+                },
+                "examples": {
+                  "demo": {
+                    "summary": "映射修改记录",
+                    "value": {
+                      "items": [
+                        {
+                          "id": "aud_9001",
+                          "occurred_at": "2026-09-16T09:30:00+08:00",
+                          "actor": "demo.admin",
+                          "action": "MAPPING_UPSERTED",
+                          "target_type": "account_mapping",
+                          "target_id": "vivo-demo-017",
+                          "detail": {
+                            "field": "operator",
+                            "before": "运营乙",
+                            "after": "运营甲"
+                          }
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "未登录或令牌已失效",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "无权限，或超出账号的数据范围",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "请求参数校验失败",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "x-requirements": [
+          "IAA-REQ-003"
+        ],
+        "x-screens": [
+          "audit-log"
+        ],
+        "x-fields": [
+          "audit_action"
+        ],
+        "x-implementation": "implemented",
+        "x-reference-implementation": {
+          "runtime": "FastAPI",
+          "status": "planned"
+        },
+        "x-implementation-source": "backend-java/src/main/java/com/iaaops/governance/web/AuditController.java"
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "AccountMapping": {
+        "properties": {
+          "account": {
+            "type": "string",
+            "title": "Account"
+          },
+          "media": {
+            "type": "string",
+            "title": "Media"
+          },
+          "agency": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Agency"
+          },
+          "product": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Product"
+          },
+          "operator": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Operator"
+          },
+          "revision": {
+            "type": "integer",
+            "title": "Revision"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "account",
+          "media",
+          "agency",
+          "product",
+          "operator",
+          "revision"
+        ],
+        "title": "AccountMapping"
+      },
+      "AccountMappingInput": {
+        "properties": {
+          "account": {
+            "type": "string",
+            "maxLength": 64,
+            "minLength": 1,
+            "title": "Account"
+          },
+          "media": {
+            "type": "string",
+            "maxLength": 32,
+            "minLength": 1,
+            "title": "Media"
+          },
+          "agency": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Agency"
+          },
+          "product": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Product"
+          },
+          "operator": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Operator"
+          },
+          "revision": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Revision",
+            "description": "null 表示新建；更新时须带最后读到的版本号"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "account",
+          "media"
+        ],
+        "title": "AccountMappingInput"
+      },
+      "AccountMappingPage": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/AccountMapping"
+            },
+            "type": "array",
+            "title": "Items"
+          },
+          "total": {
+            "type": "integer",
+            "title": "Total"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "items",
+          "total"
+        ],
+        "title": "AccountMappingPage"
+      },
+      "AccountMappingUpsert": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/AccountMappingInput"
+            },
+            "type": "array",
+            "maxItems": 500,
+            "minItems": 1,
+            "title": "Items"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "items"
+        ],
+        "title": "AccountMappingUpsert"
+      },
+      "AuditEvent": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "occurred_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Occurred At"
+          },
+          "actor": {
+            "type": "string",
+            "title": "Actor"
+          },
+          "action": {
+            "type": "string",
+            "title": "Action"
+          },
+          "target_type": {
+            "type": "string",
+            "title": "Target Type"
+          },
+          "target_id": {
+            "type": "string",
+            "title": "Target Id"
+          },
+          "detail": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/JsonValue"
+            },
+            "type": "object",
+            "title": "Detail",
+            "description": "随动作而定的前后值；键名由动作决定，值可以是嵌套结构（如角色列表、数据范围）"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "id",
+          "occurred_at",
+          "actor",
+          "action",
+          "target_type",
+          "target_id",
+          "detail"
+        ],
+        "title": "AuditEvent"
+      },
+      "AuditEventPage": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/AuditEvent"
+            },
+            "type": "array",
+            "title": "Items"
+          },
+          "next_cursor": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Next Cursor"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "items",
+          "next_cursor"
+        ],
+        "title": "AuditEventPage"
+      },
+      "Body_createImport": {
+        "properties": {
+          "file": {
+            "type": "string",
+            "contentMediaType": "application/octet-stream",
+            "title": "File",
+            "description": "媒体后台导出的 .xlsx 文件"
+          },
+          "media": {
+            "type": "string",
+            "maxLength": 32,
+            "title": "Media"
+          }
+        },
+        "type": "object",
+        "required": [
+          "file",
+          "media"
+        ],
+        "title": "Body_createImport"
+      },
+      "DataScope": {
+        "properties": {
+          "agencies": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Agencies",
+            "description": "可见代理；null 或省略表示不限；[] 表示无授权值"
+          },
+          "products": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Products",
+            "description": "可见产品；null 或省略表示不限；[] 表示无授权值"
+          },
+          "operators": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Operators",
+            "description": "可见运营；null 或省略表示不限；[] 表示无授权值"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "title": "DataScope",
+        "description": "Java 服务端授权范围；维度之间取交集。省略或 null 表示该维度不限，空数组 [] 表示该维度没有任何授权值，查询不会返回事实数据。这是授权范围，不是报表请求中用于清除筛选条件的空筛选数组。"
+      },
+      "Error": {
+        "properties": {
+          "type": {
+            "type": "string",
+            "title": "Type",
+            "default": "about:blank"
+          },
+          "title": {
+            "type": "string",
+            "title": "Title"
+          },
+          "status": {
+            "type": "integer",
+            "title": "Status"
+          },
+          "code": {
+            "type": "string",
+            "enum": [
+              "AUTH_REQUIRED",
+              "INVALID_CREDENTIALS",
+              "PASSWORD_CHANGE_REQUIRED",
+              "FORBIDDEN",
+              "NOT_FOUND",
+              "METHOD_NOT_ALLOWED",
+              "CONFLICT",
+              "PAYLOAD_TOO_LARGE",
+              "VALIDATION_FAILED",
+              "RESULT_TOO_LARGE",
+              "INTERNAL_ERROR",
+              "NOT_IMPLEMENTED",
+              "HTTP_ERROR"
+            ],
+            "title": "Code",
+            "x-code-descriptions": {
+              "AUTH_REQUIRED": "未登录、令牌缺失或已失效，需要重新登录。",
+              "CONFLICT": "对象已被他人修改（revision 不一致）或唯一键冲突，刷新后重试。",
+              "FORBIDDEN": "没有该操作的权限，或请求超出账号的数据范围。",
+              "HTTP_ERROR": "其他 HTTP 错误，以 status 为准。",
+              "INTERNAL_ERROR": "服务端异常，已记录，可稍后重试。",
+              "INVALID_CREDENTIALS": "账号或口令错误，或登录暂被限制；不区分账号不存在、口令错误、账号停用与锁定。",
+              "METHOD_NOT_ALLOWED": "路径存在，但不支持该 HTTP 方法。",
+              "NOT_FOUND": "对象或路径不存在。",
+              "NOT_IMPLEMENTED": "契约已确定，接口尚未实现。",
+              "PASSWORD_CHANGE_REQUIRED": "正在使用临时口令，修改口令前只能访问当前账号与改密接口。",
+              "PAYLOAD_TOO_LARGE": "上传文件超过大小限制。",
+              "RESULT_TOO_LARGE": "分组数或导出行数超过上限，请缩小日期范围或减少分组维度。",
+              "VALIDATION_FAILED": "请求参数未通过校验，errors 列出具体字段。"
+            }
+          },
+          "detail": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Detail"
+          },
+          "errors": {
+            "anyOf": [
+              {
+                "items": {
+                  "$ref": "#/components/schemas/FieldError"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Errors"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "title",
+          "status",
+          "code"
+        ],
+        "title": "Error",
+        "description": "RFC 9457 Problem Details（application/problem+json），所有 4xx/5xx 统一使用。"
+      },
+      "FieldError": {
+        "properties": {
+          "field": {
+            "type": "string",
+            "title": "Field"
+          },
+          "message": {
+            "type": "string",
+            "title": "Message"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "field",
+          "message"
+        ],
+        "title": "FieldError"
+      },
+      "FilterOptions": {
+        "properties": {
+          "media": {
+            "items": {
+              "$ref": "#/components/schemas/Option"
+            },
+            "type": "array",
+            "title": "Media"
+          },
+          "products": {
+            "items": {
+              "$ref": "#/components/schemas/Option"
+            },
+            "type": "array",
+            "title": "Products"
+          },
+          "agencies": {
+            "items": {
+              "$ref": "#/components/schemas/Option"
+            },
+            "type": "array",
+            "title": "Agencies"
+          },
+          "accounts": {
+            "items": {
+              "$ref": "#/components/schemas/Option"
+            },
+            "type": "array",
+            "title": "Accounts"
+          },
+          "operators": {
+            "items": {
+              "$ref": "#/components/schemas/Option"
+            },
+            "type": "array",
+            "title": "Operators"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "media",
+          "products",
+          "agencies",
+          "accounts",
+          "operators"
+        ],
+        "title": "FilterOptions"
+      },
+      "Health": {
+        "properties": {
+          "status": {
+            "type": "string",
+            "const": "ok",
+            "title": "Status"
+          },
+          "version": {
+            "type": "string",
+            "title": "Version"
+          },
+          "environment": {
+            "type": "string",
+            "title": "Environment"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "status",
+          "version",
+          "environment"
+        ],
+        "title": "Health"
+      },
+      "ImportRowError": {
+        "properties": {
+          "row": {
+            "type": "integer",
+            "title": "Row"
+          },
+          "column": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Column"
+          },
+          "message": {
+            "type": "string",
+            "title": "Message"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "row",
+          "column",
+          "message"
+        ],
+        "title": "ImportRowError"
+      },
+      "ImportTask": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "media": {
+            "type": "string",
+            "title": "Media"
+          },
+          "file_name": {
+            "type": "string",
+            "title": "File Name"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "pending",
+              "processing",
+              "succeeded",
+              "failed"
+            ],
+            "title": "Status"
+          },
+          "stat_dates": {
+            "items": {
+              "type": "string",
+              "format": "date"
+            },
+            "type": "array",
+            "title": "Stat Dates",
+            "description": "文件覆盖的日期；入库按日期整天替换，重复导入不会累加"
+          },
+          "rows_total": {
+            "type": "integer",
+            "title": "Rows Total"
+          },
+          "rows_replaced": {
+            "type": "integer",
+            "title": "Rows Replaced"
+          },
+          "errors": {
+            "items": {
+              "$ref": "#/components/schemas/ImportRowError"
+            },
+            "type": "array",
+            "title": "Errors"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          },
+          "finished_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Finished At"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "id",
+          "media",
+          "file_name",
+          "status",
+          "stat_dates",
+          "rows_total",
+          "rows_replaced",
+          "errors",
+          "created_at",
+          "finished_at"
+        ],
+        "title": "ImportTask"
+      },
+      "JsonValue": {},
+      "LoginRequest": {
+        "properties": {
+          "username": {
+            "type": "string",
+            "maxLength": 64,
+            "minLength": 1,
+            "title": "Username"
+          },
+          "password": {
+            "type": "string",
+            "maxLength": 128,
+            "minLength": 1,
+            "title": "Password"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "username",
+          "password"
+        ],
+        "title": "LoginRequest"
+      },
+      "MetricCatalog": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/MetricDefinition"
+            },
+            "type": "array",
+            "title": "Items"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "items"
+        ],
+        "title": "MetricCatalog"
+      },
+      "MetricDefinition": {
+        "properties": {
+          "key": {
+            "type": "string",
+            "title": "Key"
+          },
+          "label": {
+            "type": "string",
+            "title": "Label"
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "base",
+              "derived"
+            ],
+            "title": "Kind"
+          },
+          "unit": {
+            "type": "string",
+            "enum": [
+              "money",
+              "count",
+              "ratio",
+              "per_unit"
+            ],
+            "title": "Unit"
+          },
+          "formula": {
+            "type": "string",
+            "title": "Formula"
+          },
+          "description": {
+            "type": "string",
+            "title": "Description"
+          },
+          "precision": {
+            "type": "integer",
+            "title": "Precision"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "key",
+          "label",
+          "kind",
+          "unit",
+          "formula",
+          "description",
+          "precision"
+        ],
+        "title": "MetricDefinition"
+      },
+      "NavGroup": {
+        "properties": {
+          "title": {
+            "type": "string",
+            "title": "Title"
+          },
+          "pages": {
+            "items": {
+              "$ref": "#/components/schemas/NavPage"
+            },
+            "type": "array",
+            "title": "Pages"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "title",
+          "pages"
+        ],
+        "title": "NavGroup"
+      },
+      "NavPage": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "title": {
+            "type": "string",
+            "title": "Title"
+          },
+          "route": {
+            "type": "string",
+            "title": "Route"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "id",
+          "title",
+          "route"
+        ],
+        "title": "NavPage"
+      },
+      "Option": {
+        "properties": {
+          "value": {
+            "type": "string",
+            "title": "Value"
+          },
+          "label": {
+            "type": "string",
+            "title": "Label"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "value",
+          "label"
+        ],
+        "title": "Option"
+      },
+      "PasswordChange": {
+        "properties": {
+          "current_password": {
+            "type": "string",
+            "maxLength": 128,
+            "minLength": 1,
+            "title": "Current Password"
+          },
+          "new_password": {
+            "type": "string",
+            "maxLength": 128,
+            "minLength": 10,
+            "title": "New Password",
+            "description": "至少 10 位，不能与当前口令相同"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "current_password",
+          "new_password"
+        ],
+        "title": "PasswordChange"
+      },
+      "Preferences": {
+        "properties": {
+          "theme_mode": {
+            "type": "string",
+            "enum": [
+              "light",
+              "dark",
+              "system"
+            ],
+            "title": "Theme Mode"
+          },
+          "theme_preset": {
+            "type": "string",
+            "enum": [
+              "aurora-blue",
+              "arc-purple",
+              "quantum-cyan",
+              "pulse-green",
+              "corona-gold",
+              "molten-orange",
+              "rose-wave",
+              "glacier-blue",
+              "nebula-purple",
+              "deep-space-gray",
+              "neon-cyan",
+              "custom"
+            ],
+            "title": "Theme Preset"
+          },
+          "custom_primary": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^#[0-9A-Fa-f]{6}$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Custom Primary",
+            "description": "theme_preset 为 custom 时的主色"
+          },
+          "table_columns": {
+            "additionalProperties": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "type": "object",
+            "title": "Table Columns",
+            "description": "按页面保存的列顺序与显隐，键为页面 id"
+          },
+          "revision": {
+            "type": "integer",
+            "minimum": 0.0,
+            "title": "Revision",
+            "description": "客户端最后读到的版本号，用于并发冲突检测"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "theme_mode",
+          "theme_preset",
+          "revision"
+        ],
+        "title": "Preferences",
+        "description": "账号级偏好；revision 为服务端当前版本号。"
+      },
+      "PreferencesUpdate": {
+        "properties": {
+          "theme_mode": {
+            "type": "string",
+            "enum": [
+              "light",
+              "dark",
+              "system"
+            ],
+            "title": "Theme Mode"
+          },
+          "theme_preset": {
+            "type": "string",
+            "enum": [
+              "aurora-blue",
+              "arc-purple",
+              "quantum-cyan",
+              "pulse-green",
+              "corona-gold",
+              "molten-orange",
+              "rose-wave",
+              "glacier-blue",
+              "nebula-purple",
+              "deep-space-gray",
+              "neon-cyan",
+              "custom"
+            ],
+            "title": "Theme Preset"
+          },
+          "custom_primary": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^#[0-9A-Fa-f]{6}$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Custom Primary",
+            "description": "theme_preset 为 custom 时的主色"
+          },
+          "table_columns": {
+            "additionalProperties": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "type": "object",
+            "title": "Table Columns",
+            "description": "按页面保存的列顺序与显隐，键为页面 id"
+          },
+          "revision": {
+            "type": "integer",
+            "minimum": 0.0,
+            "title": "Revision",
+            "description": "客户端最后读到的版本号，用于并发冲突检测"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "theme_mode",
+          "theme_preset",
+          "revision"
+        ],
+        "title": "PreferencesUpdate"
+      },
+      "Principal": {
+        "properties": {
+          "user_id": {
+            "type": "string",
+            "title": "User Id"
+          },
+          "username": {
+            "type": "string",
+            "title": "Username"
+          },
+          "display_name": {
+            "type": "string",
+            "title": "Display Name"
+          },
+          "tenant_id": {
+            "type": "string",
+            "title": "Tenant Id"
+          },
+          "roles": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Roles"
+          },
+          "permissions": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Permissions"
+          },
+          "data_scope": {
+            "$ref": "#/components/schemas/DataScope"
+          },
+          "must_change_password": {
+            "type": "boolean",
+            "title": "Must Change Password"
+          },
+          "visible_metrics": {
+            "items": {
+              "type": "string",
+              "enum": [
+                "cost",
+                "revenue",
+                "impressions",
+                "clicks",
+                "launches",
+                "callbacks",
+                "conversions",
+                "roi",
+                "ctr",
+                "cpm",
+                "cpc",
+                "click_arpu",
+                "launch_rate",
+                "cvr",
+                "conversion_cost",
+                "callback_cost",
+                "launch_callback_rate",
+                "revenue_gap"
+              ]
+            },
+            "type": "array",
+            "title": "Visible Metrics",
+            "description": "当前账号可查看的指标；前端据此裁剪列选择，接口仍独立校验"
+          },
+          "navigation": {
+            "items": {
+              "$ref": "#/components/schemas/NavGroup"
+            },
+            "type": "array",
+            "title": "Navigation",
+            "description": "按权限裁剪后的导航；仅用于展示，接口仍独立鉴权"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "user_id",
+          "username",
+          "display_name",
+          "tenant_id",
+          "roles",
+          "permissions",
+          "data_scope",
+          "must_change_password",
+          "visible_metrics",
+          "navigation"
+        ],
+        "title": "Principal"
+      },
+      "RawDetailQuery": {
+        "properties": {
+          "date_from": {
+            "type": "string",
+            "format": "date",
+            "title": "Date From"
+          },
+          "date_to": {
+            "type": "string",
+            "format": "date",
+            "title": "Date To"
+          },
+          "filters": {
+            "$ref": "#/components/schemas/ReportFilters"
+          },
+          "keyword": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 100
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Keyword"
+          },
+          "sort": {
+            "items": {
+              "$ref": "#/components/schemas/SortSpec"
+            },
+            "type": "array",
+            "maxItems": 3,
+            "title": "Sort"
+          },
+          "page": {
+            "type": "integer",
+            "minimum": 1.0,
+            "title": "Page",
+            "default": 1
+          },
+          "page_size": {
+            "type": "integer",
+            "maximum": 500.0,
+            "minimum": 1.0,
+            "title": "Page Size",
+            "default": 100
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "date_from",
+          "date_to"
+        ],
+        "title": "RawDetailQuery"
+      },
+      "RefreshRequest": {
+        "properties": {
+          "refresh_token": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Refresh Token"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "refresh_token"
+        ],
+        "title": "RefreshRequest"
+      },
+      "ReportColumn": {
+        "properties": {
+          "key": {
+            "type": "string",
+            "title": "Key"
+          },
+          "label": {
+            "type": "string",
+            "title": "Label"
+          },
+          "kind": {
+            "anyOf": [
+              {
+                "type": "string",
+                "const": "dimension"
+              },
+              {
+                "type": "string",
+                "enum": [
+                  "base",
+                  "derived"
+                ]
+              }
+            ],
+            "title": "Kind"
+          },
+          "unit": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "money",
+                  "count",
+                  "ratio",
+                  "per_unit"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Unit"
+          },
+          "precision": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Precision"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "key",
+          "label",
+          "kind"
+        ],
+        "title": "ReportColumn"
+      },
+      "ReportFilters": {
+        "properties": {
+          "media": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Media",
+            "description": "媒体；空列表表示不限"
+          },
+          "products": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Products"
+          },
+          "agencies": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Agencies"
+          },
+          "accounts": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Accounts"
+          },
+          "operators": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Operators"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "title": "ReportFilters"
+      },
+      "ReportQuery": {
+        "properties": {
+          "date_from": {
+            "type": "string",
+            "format": "date",
+            "title": "Date From"
+          },
+          "date_to": {
+            "type": "string",
+            "format": "date",
+            "title": "Date To"
+          },
+          "filters": {
+            "$ref": "#/components/schemas/ReportFilters"
+          },
+          "keyword": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 100
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Keyword",
+            "description": "在维度值中搜索"
+          },
+          "group_by": {
+            "items": {
+              "type": "string",
+              "enum": [
+                "stat_date",
+                "stat_hour",
+                "media",
+                "product",
+                "agency",
+                "account",
+                "operator",
+                "campaign"
+              ]
+            },
+            "type": "array",
+            "maxItems": 4,
+            "minItems": 1,
+            "title": "Group By"
+          },
+          "metrics": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string",
+                  "enum": [
+                    "cost",
+                    "revenue",
+                    "impressions",
+                    "clicks",
+                    "launches",
+                    "callbacks",
+                    "conversions",
+                    "roi",
+                    "ctr",
+                    "cpm",
+                    "cpc",
+                    "click_arpu",
+                    "launch_rate",
+                    "cvr",
+                    "conversion_cost",
+                    "callback_cost",
+                    "launch_callback_rate",
+                    "revenue_gap"
+                  ]
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Metrics",
+            "description": "null 表示默认指标列；对外口径账号请求收益类指标返回 403"
+          },
+          "sort": {
+            "items": {
+              "$ref": "#/components/schemas/SortSpec"
+            },
+            "type": "array",
+            "maxItems": 3,
+            "title": "Sort"
+          },
+          "page": {
+            "type": "integer",
+            "minimum": 1.0,
+            "title": "Page",
+            "default": 1
+          },
+          "page_size": {
+            "type": "integer",
+            "maximum": 500.0,
+            "minimum": 1.0,
+            "title": "Page Size",
+            "default": 50
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "date_from",
+          "date_to"
+        ],
+        "title": "ReportQuery"
+      },
+      "ReportResult": {
+        "properties": {
+          "columns": {
+            "items": {
+              "$ref": "#/components/schemas/ReportColumn"
+            },
+            "type": "array",
+            "title": "Columns"
+          },
+          "rows": {
+            "items": {
+              "additionalProperties": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "integer"
+                  },
+                  {
+                    "type": "number"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "type": "object"
+            },
+            "type": "array",
+            "title": "Rows"
+          },
+          "totals": {
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "type": "object",
+            "title": "Totals",
+            "description": "当前筛选范围的合计，派生指标由合计基础指标重算"
+          },
+          "page": {
+            "type": "integer",
+            "title": "Page"
+          },
+          "page_size": {
+            "type": "integer",
+            "title": "Page Size"
+          },
+          "total_rows": {
+            "type": "integer",
+            "title": "Total Rows"
+          },
+          "data_as_of": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Data As Of"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "columns",
+          "rows",
+          "totals",
+          "page",
+          "page_size",
+          "total_rows",
+          "data_as_of"
+        ],
+        "title": "ReportResult"
+      },
+      "RoiAnomaly": {
+        "properties": {
+          "dimensions": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object",
+            "title": "Dimensions"
+          },
+          "cost": {
+            "type": "number",
+            "title": "Cost"
+          },
+          "revenue": {
+            "type": "number",
+            "title": "Revenue"
+          },
+          "roi": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Roi"
+          },
+          "reason": {
+            "type": "string",
+            "title": "Reason"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "dimensions",
+          "cost",
+          "revenue",
+          "roi",
+          "reason"
+        ],
+        "title": "RoiAnomaly"
+      },
+      "RoiAnomalyQuery": {
+        "properties": {
+          "date_from": {
+            "type": "string",
+            "format": "date",
+            "title": "Date From"
+          },
+          "date_to": {
+            "type": "string",
+            "format": "date",
+            "title": "Date To"
+          },
+          "filters": {
+            "$ref": "#/components/schemas/ReportFilters"
+          },
+          "group_by": {
+            "items": {
+              "type": "string",
+              "enum": [
+                "stat_date",
+                "stat_hour",
+                "media",
+                "product",
+                "agency",
+                "account",
+                "operator",
+                "campaign"
+              ]
+            },
+            "type": "array",
+            "maxItems": 3,
+            "minItems": 1,
+            "title": "Group By"
+          },
+          "roi_below": {
+            "type": "number",
+            "maximum": 10.0,
+            "exclusiveMinimum": 0.0,
+            "title": "Roi Below",
+            "description": "ROI 低于该值视为异常",
+            "default": 1.1
+          },
+          "min_cost": {
+            "type": "number",
+            "minimum": 0.0,
+            "title": "Min Cost",
+            "description": "消耗低于该值不参与判断，避免小额噪声",
+            "default": 200
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "date_from",
+          "date_to"
+        ],
+        "title": "RoiAnomalyQuery"
+      },
+      "RoiAnomalyResult": {
+        "properties": {
+          "rule": {
+            "type": "string",
+            "title": "Rule"
+          },
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/RoiAnomaly"
+            },
+            "type": "array",
+            "title": "Items"
+          },
+          "data_as_of": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Data As Of"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "rule",
+          "items",
+          "data_as_of"
+        ],
+        "title": "RoiAnomalyResult"
+      },
+      "SortSpec": {
+        "properties": {
+          "field": {
+            "type": "string",
+            "title": "Field",
+            "description": "列 key，维度或指标"
+          },
+          "direction": {
+            "type": "string",
+            "enum": [
+              "asc",
+              "desc"
+            ],
+            "title": "Direction",
+            "default": "desc"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "field"
+        ],
+        "title": "SortSpec"
+      },
+      "TokenPair": {
+        "properties": {
+          "access_token": {
+            "type": "string",
+            "title": "Access Token"
+          },
+          "refresh_token": {
+            "type": "string",
+            "title": "Refresh Token"
+          },
+          "token_type": {
+            "type": "string",
+            "const": "bearer",
+            "title": "Token Type",
+            "default": "bearer"
+          },
+          "expires_in": {
+            "type": "integer",
+            "title": "Expires In",
+            "description": "访问令牌有效秒数"
+          },
+          "must_change_password": {
+            "type": "boolean",
+            "title": "Must Change Password"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "access_token",
+          "refresh_token",
+          "expires_in",
+          "must_change_password"
+        ],
+        "title": "TokenPair"
+      },
+      "TrendPoint": {
+        "properties": {
+          "bucket": {
+            "type": "string",
+            "title": "Bucket"
+          },
+          "values": {
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "type": "object",
+            "title": "Values"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "bucket",
+          "values"
+        ],
+        "title": "TrendPoint"
+      },
+      "TrendQuery": {
+        "properties": {
+          "date_from": {
+            "type": "string",
+            "format": "date",
+            "title": "Date From"
+          },
+          "date_to": {
+            "type": "string",
+            "format": "date",
+            "title": "Date To"
+          },
+          "filters": {
+            "$ref": "#/components/schemas/ReportFilters"
+          },
+          "granularity": {
+            "type": "string",
+            "enum": [
+              "day",
+              "hour"
+            ],
+            "title": "Granularity",
+            "default": "day"
+          },
+          "metrics": {
+            "items": {
+              "type": "string",
+              "enum": [
+                "cost",
+                "revenue",
+                "impressions",
+                "clicks",
+                "launches",
+                "callbacks",
+                "conversions",
+                "roi",
+                "ctr",
+                "cpm",
+                "cpc",
+                "click_arpu",
+                "launch_rate",
+                "cvr",
+                "conversion_cost",
+                "callback_cost",
+                "launch_callback_rate",
+                "revenue_gap"
+              ]
+            },
+            "type": "array",
+            "maxItems": 4,
+            "minItems": 1,
+            "title": "Metrics"
+          },
+          "split_by": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "stat_date",
+                  "stat_hour",
+                  "media",
+                  "product",
+                  "agency",
+                  "account",
+                  "operator",
+                  "campaign"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Split By",
+            "description": "按该维度拆成多条序列"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "date_from",
+          "date_to"
+        ],
+        "title": "TrendQuery"
+      },
+      "TrendResult": {
+        "properties": {
+          "metrics": {
+            "items": {
+              "type": "string",
+              "enum": [
+                "cost",
+                "revenue",
+                "impressions",
+                "clicks",
+                "launches",
+                "callbacks",
+                "conversions",
+                "roi",
+                "ctr",
+                "cpm",
+                "cpc",
+                "click_arpu",
+                "launch_rate",
+                "cvr",
+                "conversion_cost",
+                "callback_cost",
+                "launch_callback_rate",
+                "revenue_gap"
+              ]
+            },
+            "type": "array",
+            "title": "Metrics"
+          },
+          "series": {
+            "items": {
+              "$ref": "#/components/schemas/TrendSeries"
+            },
+            "type": "array",
+            "title": "Series"
+          },
+          "data_as_of": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Data As Of"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "metrics",
+          "series",
+          "data_as_of"
+        ],
+        "title": "TrendResult"
+      },
+      "TrendSeries": {
+        "properties": {
+          "key": {
+            "type": "string",
+            "title": "Key"
+          },
+          "label": {
+            "type": "string",
+            "title": "Label"
+          },
+          "points": {
+            "items": {
+              "$ref": "#/components/schemas/TrendPoint"
+            },
+            "type": "array",
+            "title": "Points"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "key",
+          "label",
+          "points"
+        ],
+        "title": "TrendSeries"
+      },
+      "UpsertResult": {
+        "properties": {
+          "created": {
+            "type": "integer",
+            "title": "Created"
+          },
+          "updated": {
+            "type": "integer",
+            "title": "Updated"
+          },
+          "unchanged": {
+            "type": "integer",
+            "title": "Unchanged"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "created",
+          "updated",
+          "unchanged"
+        ],
+        "title": "UpsertResult"
+      },
+      "UserCreate": {
+        "properties": {
+          "username": {
+            "type": "string",
+            "pattern": "^[a-z0-9_.-]{3,32}$",
+            "title": "Username"
+          },
+          "display_name": {
+            "type": "string",
+            "maxLength": 32,
+            "minLength": 1,
+            "title": "Display Name"
+          },
+          "roles": {
+            "items": {
+              "type": "string",
+              "enum": [
+                "super_admin",
+                "company_admin",
+                "operator",
+                "agency_admin",
+                "customer",
+                "readonly"
+              ]
+            },
+            "type": "array",
+            "minItems": 1,
+            "title": "Roles"
+          },
+          "data_scope": {
+            "$ref": "#/components/schemas/DataScope"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "username",
+          "display_name",
+          "roles"
+        ],
+        "title": "UserCreate"
+      },
+      "UserCreated": {
+        "properties": {
+          "user": {
+            "$ref": "#/components/schemas/UserSummary"
+          },
+          "one_time_password": {
+            "type": "string",
+            "title": "One Time Password",
+            "description": "仅在本响应返回一次；首次登录必须修改"
+          },
+          "must_change_password": {
+            "type": "boolean",
+            "const": true,
+            "title": "Must Change Password",
+            "default": true
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "user",
+          "one_time_password"
+        ],
+        "title": "UserCreated"
+      },
+      "UserPage": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/UserSummary"
+            },
+            "type": "array",
+            "title": "Items"
+          },
+          "total": {
+            "type": "integer",
+            "title": "Total"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "items",
+          "total"
+        ],
+        "title": "UserPage"
+      },
+      "UserRolesUpdate": {
+        "properties": {
+          "roles": {
+            "items": {
+              "type": "string",
+              "enum": [
+                "super_admin",
+                "company_admin",
+                "operator",
+                "agency_admin",
+                "customer",
+                "readonly"
+              ]
+            },
+            "type": "array",
+            "minItems": 1,
+            "title": "Roles"
+          },
+          "data_scope": {
+            "$ref": "#/components/schemas/DataScope"
+          },
+          "revision": {
+            "type": "integer",
+            "minimum": 0.0,
+            "title": "Revision"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "roles",
+          "data_scope",
+          "revision"
+        ],
+        "title": "UserRolesUpdate"
+      },
+      "UserSummary": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "username": {
+            "type": "string",
+            "title": "Username"
+          },
+          "display_name": {
+            "type": "string",
+            "title": "Display Name"
+          },
+          "roles": {
+            "items": {
+              "type": "string",
+              "enum": [
+                "super_admin",
+                "company_admin",
+                "operator",
+                "agency_admin",
+                "customer",
+                "readonly"
+              ]
+            },
+            "type": "array",
+            "title": "Roles"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "active",
+              "disabled"
+            ],
+            "title": "Status"
+          },
+          "data_scope": {
+            "$ref": "#/components/schemas/DataScope"
+          },
+          "revision": {
+            "type": "integer",
+            "title": "Revision"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "id",
+          "username",
+          "display_name",
+          "roles",
+          "status",
+          "data_scope",
+          "revision"
+        ],
+        "title": "UserSummary"
+      }
+    },
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  },
+  "tags": [
+    {
+      "name": "系统",
+      "description": "健康检查等运维接口。"
+    },
+    {
+      "name": "认证与偏好",
+      "description": "登录、令牌、当前账号与账号级界面偏好。"
+    },
+    {
+      "name": "指标",
+      "description": "指标口径目录，与后端计算共用同一份定义。"
+    },
+    {
+      "name": "看盘分析",
+      "description": "聚合、分天、趋势、ROI 异常、原始明细与导出，均受账号数据范围约束。"
+    },
+    {
+      "name": "映射管理",
+      "description": "账户与代理、产品、运营的归属映射。"
+    },
+    {
+      "name": "数据导入",
+      "description": "媒体后台导出表的上传与按天幂等入库。"
+    },
+    {
+      "name": "用户与权限",
+      "description": "账号、角色与数据范围。"
+    },
+    {
+      "name": "审计",
+      "description": "关键写操作的审计记录。"
+    }
+  ],
+  "servers": [
+    {
+      "url": "http://127.0.0.1:8080",
+      "description": "本机 Java 业务服务",
+      "x-environment": "development"
+    },
+    {
+      "url": "http://127.0.0.1:18081",
+      "description": "本机 Java 隔离验收示例，按需启动，非常驻入口",
+      "x-environment": "testing"
+    },
+    {
+      "url": "https://iaa-ops.invalid",
+      "description": "公开演示规划占位，尚未部署；发布后替换为真实地址",
+      "x-environment": "production"
+    }
+  ],
+  "security": [
+    {
+      "bearerAuth": []
+    }
+  ],
+  "x-contract-source": {
+    "schemas": "backend/app",
+    "runtime": "backend-java",
+    "exporter": "backend/scripts/export_openapi.py",
+    "reference-runtime": "backend (FastAPI; 8 operations still return 501)"
+  }
+}

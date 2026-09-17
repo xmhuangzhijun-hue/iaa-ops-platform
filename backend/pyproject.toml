@@ -1,0 +1,25 @@
+[project]
+name = "iaa-ops-backend"
+version = "0.2.0"
+description = "IAA 投放运营中台后端"
+requires-python = ">=3.12"
+dependencies = [
+    "alembic>=1.13",
+    "argon2-cffi>=23.1",
+    "fastapi>=0.115,<1",
+    "psycopg[binary]>=3.2",
+    "pyjwt>=2.9",
+    "python-multipart>=0.0.9",
+    "sqlalchemy>=2.0.30",
+    "uvicorn[standard]>=0.30",
+]
+
+[dependency-groups]
+dev = [
+    "httpx>=0.27",
+    "pytest>=8",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]

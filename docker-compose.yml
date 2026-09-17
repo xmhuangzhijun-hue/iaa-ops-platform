@@ -1,0 +1,24 @@
+name: iaa-ops
+
+services:
+  postgres:
+    image: postgres:17-bookworm
+    environment:
+      POSTGRES_USER: iaa
+      POSTGRES_DB: iaa_ops
+      # 仅供本机开发：端口只绑定 127.0.0.1，免口令连接。部署环境另用带口令与密钥管理的配置。
+      POSTGRES_HOST_AUTH_METHOD: trust
+      PGDATA: /var/lib/postgresql/data/pgdata
+    command: ["postgres", "-c", "shared_buffers=64MB", "-c", "max_connections=30"]
+    ports:
+      - "127.0.0.1:${IAA_PG_PORT:-55433}:5432"
+    volumes:
+      - ${IAA_PG_DATA:-iaa-pg-data}:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U iaa -d iaa_ops"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+volumes:
+  iaa-pg-data:

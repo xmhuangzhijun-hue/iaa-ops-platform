@@ -1,0 +1,66 @@
+spring:
+  application:
+    name: iaa-ops-backend
+  datasource:
+    url: ${DATABASE_URL:jdbc:postgresql://127.0.0.1:55433/iaa_ops}
+    username: ${DATABASE_USER:iaa}
+    password: ${DATABASE_PASSWORD:}
+    hikari:
+      maximum-pool-size: 10
+  jpa:
+    open-in-view: false
+    hibernate:
+      # 表结构由 db/migration 下的迁移负责，运行时只校验实体与表是否一致。
+      ddl-auto: validate
+    properties:
+      hibernate:
+        jdbc:
+          time_zone: UTC
+  flyway:
+    enabled: true
+    # 第 2 阶段的表由 Alembic 建出，V1 是它的逐字转写：已有的库直接打基线不重跑，新库从 V1 开始建。
+    baseline-on-migrate: true
+    baseline-version: 1
+  jackson:
+    # 契约里的字段一律 snake_case，Java 侧字段保持驼峰，由序列化策略转换。
+    property-naming-strategy: SNAKE_CASE
+
+  servlet:
+    multipart:
+      # 媒体后台的日导出表一般在几 MB；超过就按契约返回 413，不让请求把内存吃满
+      max-file-size: 10MB
+      max-request-size: 12MB
+
+server:
+  port: ${SERVER_PORT:8080}
+  # 不信任客户端自报的转发头；经代理部署前必须另行配置可信代理边界。
+  forward-headers-strategy: none
+  shutdown: graceful
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      probes:
+        enabled: true
+
+app:
+  environment: ${APP_ENV:development}
+  version: 1.0.0-rc.1
+  # 非本机环境必须注入；缺失时启动即失败，不允许静默使用弱密钥。
+  jwt-signing-key: ${JWT_SIGNING_KEY:}
+  access-token-ttl: 15m
+  refresh-token-ttl: 7d
+  login-protection:
+    account-failures: 5
+    ip-failures: 20
+    window: 15m
+    lock-duration: 15m
+    max-entries: 10000
+
+logging:
+  level:
+    org.hibernate.SQL: ${SQL_LOG_LEVEL:warn}

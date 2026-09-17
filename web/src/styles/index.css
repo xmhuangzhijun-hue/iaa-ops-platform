@@ -1,0 +1,232 @@
+@import "tailwindcss";
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-panel: var(--panel);
+  --color-panel-strong: var(--panel-strong);
+  --color-text: var(--text);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --color-primary: var(--primary);
+  --color-accent: var(--accent);
+  --color-on-primary: var(--on-primary);
+  --color-good: var(--good);
+  --color-bad: var(--bad);
+  --color-warn: var(--warn);
+  --font-sans: "Inter", "SF Pro Display", "Microsoft YaHei UI", "PingFang SC", system-ui, sans-serif;
+}
+
+/* 浅色以已确认的「干净清爽」为准：白卡、深字、弱环境光，内容卡片不加模糊。 */
+:root {
+  --primary: #42d9ff;
+  --glow: #6c63ff;
+  --accent: #0b6f8a;
+  --on-primary: #0b1622;
+  --bg: #eaf0f6;
+  --panel: rgba(255, 255, 255, 0.94);
+  --panel-strong: #ffffff;
+  --text: #172231;
+  --muted: #5e6e84;
+  --line: rgba(91, 111, 136, 0.22);
+  --row-alt: rgba(234, 240, 246, 0.55);
+  --sidebar-bg: linear-gradient(155deg, rgba(248, 250, 253, 0.9), rgba(233, 239, 246, 0.84) 52%, rgba(224, 233, 242, 0.82));
+  --sidebar-text: #253548;
+  --sidebar-muted: #6a7b90;
+  --sidebar-border: rgba(76, 102, 132, 0.2);
+  --sidebar-blur: 26px;
+  --card-blur: 0px;
+  --card-shadow: 0 1px 2px rgba(19, 32, 50, 0.04), 0 8px 24px rgba(19, 32, 50, 0.03);
+  --ambient: 0.08;
+  --good: #14785a;
+  --bad: #c54659;
+  --warn: #9b6718;
+  --primary-soft: color-mix(in srgb, var(--primary) 13%, transparent);
+  color-scheme: light;
+}
+
+/* 深色沿用已认可的环境光暗玻璃。 */
+:root[data-mode="dark"] {
+  --bg: #08111c;
+  --panel: rgba(16, 29, 45, 0.76);
+  --panel-strong: #101d2d;
+  --text: #eef5ff;
+  --muted: #91a2b9;
+  --line: rgba(139, 171, 205, 0.18);
+  --row-alt: rgba(255, 255, 255, 0.025);
+  --sidebar-bg: linear-gradient(155deg, rgba(27, 50, 75, 0.52), rgba(8, 20, 36, 0.64) 48%, rgba(8, 20, 36, 0.52));
+  --sidebar-text: #dce8f7;
+  --sidebar-muted: #9aadc2;
+  --sidebar-border: rgba(221, 241, 255, 0.16);
+  --sidebar-blur: 34px;
+  --card-blur: 20px;
+  --card-shadow: none;
+  --ambient: 0.44;
+  --good: #5de1a3;
+  --bad: #ff8596;
+  --warn: #f3c46b;
+  --primary-soft: color-mix(in srgb, var(--primary) 11%, transparent);
+  color-scheme: dark;
+}
+
+@layer base {
+  html,
+  body {
+    background-color: var(--bg);
+    color: var(--text);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+  }
+  :focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+  input[type="date"]::-webkit-calendar-picker-indicator {
+    opacity: 0.6;
+  }
+}
+
+@layer components {
+  .app-ambient {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    background:
+      radial-gradient(ellipse at 78% -10%, color-mix(in srgb, var(--primary) calc(var(--ambient) * 100%), transparent) 0%, transparent 46%),
+      radial-gradient(ellipse at 6% 86%, color-mix(in srgb, var(--glow) calc(var(--ambient) * 80%), transparent) 0%, transparent 42%);
+  }
+
+  .glass-sidebar {
+    background: var(--sidebar-bg);
+    color: var(--sidebar-text);
+    border-right: 1px solid var(--sidebar-border);
+    backdrop-filter: blur(var(--sidebar-blur)) saturate(145%);
+    -webkit-backdrop-filter: blur(var(--sidebar-blur)) saturate(145%);
+  }
+
+  .card {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    box-shadow: var(--card-shadow);
+    backdrop-filter: blur(var(--card-blur));
+    -webkit-backdrop-filter: blur(var(--card-blur));
+  }
+
+  .popover {
+    background: var(--panel-strong);
+    color: var(--text);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    box-shadow: 0 18px 48px rgba(10, 20, 35, 0.18);
+    z-index: 60;
+  }
+
+  .control {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    min-height: 2.25rem;
+    padding: 0 0.75rem;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    background: var(--panel-strong);
+    color: var(--text);
+    font-size: 0.875rem;
+    white-space: nowrap;
+  }
+  .control:hover {
+    border-color: color-mix(in srgb, var(--primary) 55%, var(--line));
+  }
+  .control:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+  }
+
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    min-height: 2.25rem;
+    padding: 0 1rem;
+    border-radius: 10px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--on-primary);
+    background: linear-gradient(135deg, var(--primary), color-mix(in srgb, var(--primary) 70%, var(--glow)));
+    box-shadow: 0 6px 18px color-mix(in srgb, var(--primary) 26%, transparent);
+  }
+  .btn-primary:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+    box-shadow: none;
+  }
+
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    min-height: 1.9rem;
+    padding: 0 0.7rem;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    font-size: 0.8125rem;
+    color: var(--text);
+    background: var(--panel-strong);
+  }
+  .chip[aria-pressed="true"] {
+    color: var(--accent);
+    border-color: color-mix(in srgb, var(--primary) 60%, transparent);
+    background: var(--primary-soft);
+    font-weight: 600;
+  }
+
+  .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    min-height: 2.5rem;
+    padding: 0 0.75rem;
+    border-radius: 11px;
+    border: 1px solid transparent;
+    font-size: 0.875rem;
+    transition: background 0.16s ease, transform 0.16s ease;
+  }
+  .nav-item:hover {
+    background: color-mix(in srgb, var(--primary) 8%, transparent);
+    transform: translateX(3px);
+  }
+  .nav-item[aria-current="page"] {
+    color: var(--accent);
+    font-weight: 650;
+    background: linear-gradient(100deg, color-mix(in srgb, var(--primary) 17%, transparent), color-mix(in srgb, var(--glow) 8%, transparent));
+    border-color: color-mix(in srgb, var(--primary) 30%, transparent);
+    box-shadow: inset 3px 0 var(--primary);
+  }
+
+  .cell-bad {
+    color: var(--bad);
+    font-weight: 600;
+  }
+  .cell-good {
+    color: var(--good);
+  }
+  .grid-host .ag-row-pinned {
+    font-weight: 650;
+    background: var(--primary-soft);
+  }
+}
+
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .glass-sidebar {
+    background: var(--panel-strong);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nav-item,
+  .nav-item:hover {
+    transition: none;
+    transform: none;
+  }
+}

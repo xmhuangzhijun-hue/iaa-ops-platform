@@ -1,0 +1,135 @@
+name: ci
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  backend:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:17-bookworm
+        env:
+          POSTGRES_USER: iaa
+          POSTGRES_DB: iaa_ops
+          POSTGRES_HOST_AUTH_METHOD: trust
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U iaa -d iaa_ops"
+          --health-interval 5s
+          --health-timeout 3s
+          --health-retries 20
+    env:
+      IAA_TEST_DATABASE_URL: postgresql+psycopg://iaa@127.0.0.1:5432/iaa_ops_test
+    defaults:
+      run:
+        working-directory: backend
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          python-version: "3.13"
+      - run: uv sync --locked
+      - run: uv run pytest -q
+      - name: 契约与代码一致
+        run: uv run python scripts/export_openapi.py --check
+
+  backend-java:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: backend-java
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "21"
+      - uses: gradle/actions/setup-gradle@v4
+      - run: chmod +x gradlew
+      # 集成测试用 Testcontainers 起 PostgreSQL，runner 自带 Docker
+      - run: ./gradlew build
+
+  backend-parity:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    services:
+      postgres:
+        image: postgres:17-bookworm
+        env:
+          POSTGRES_USER: iaa
+          POSTGRES_DB: iaa_ops_parity
+          POSTGRES_HOST_AUTH_METHOD: trust
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U iaa -d iaa_ops_parity"
+          --health-interval 5s
+          --health-timeout 3s
+          --health-retries 20
+    env:
+      APP_ENV: test
+      TZ: UTC
+      PARITY_PYTHON_DATABASE_URL: postgresql+psycopg://iaa@127.0.0.1:5432/iaa_ops_parity
+      PARITY_JAVA_DATABASE_URL: jdbc:postgresql://127.0.0.1:5432/iaa_ops_parity
+      DATABASE_USER: iaa
+      PARITY_LOG_DIR: ${{ runner.temp }}/iaa-parity
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          python-version: "3.13"
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "21"
+      - uses: gradle/actions/setup-gradle@v4
+      - run: uv sync --locked
+        working-directory: backend
+      - name: 建立 Alembic 基线并写入虚构数据
+        working-directory: backend
+        env:
+          DATABASE_URL: ${{ env.PARITY_PYTHON_DATABASE_URL }}
+        run: |
+          uv run alembic upgrade head
+          uv run python -m app.demo.seed --days 60
+      - name: 构建可执行 Java 服务
+        working-directory: backend-java
+        run: |
+          chmod +x gradlew
+          ./gradlew bootJar --no-daemon
+      - name: 双服务同库对照与契约校验
+        run: bash tools/parity/run-ci.sh
+      - name: 保存服务与对照日志
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: backend-parity-logs
+          path: ${{ runner.temp }}/iaa-parity
+          if-no-files-found: ignore
+          retention-days: 7
+
+  web:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: web
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          package_json_file: web/package.json
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+          cache-dependency-path: web/pnpm-lock.yaml
+      - run: pnpm install --frozen-lockfile
+      - name: 前端类型与契约一致
+        run: pnpm gen:api && git diff --exit-code src/api/schema.d.ts
+      - run: pnpm build
