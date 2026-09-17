@@ -48,7 +48,9 @@ CLI 的 `passed` 仅表示明确列出的结构和数据库断言。评测脚本
 
 这次浏览器任务还发现模型对时区的误判：把 `2026-09-17T18:44:40Z` 误当作早于本地 9 月 18 日，声称可能过期；正确本地时间是 9 月 18 日 02:44:40。界面和服务端使用实际时间校验，提案仍有效。该失败保留在回读结果中，不能用模型自然语言决定有效期。
 
-前端 TypeScript 与 Vite 生产构建通过，既有图表 / 表格分包仍有体积警告。公开 CI 将在本次推送后核对；对应提交的结果以 [Actions](https://github.com/xmhuangzhijun-hue/iaa-ops-platform/actions) 为准。没有新增自动化浏览器端到端套件；这里记录真实交互和数据库回读。
+前端 TypeScript 与 Vite 生产构建通过，工作台分包 195.78 kB（gzip 61.13 kB），既有图表 / 表格共享分包仍有体积警告。没有新增自动化浏览器端到端套件；这里记录真实交互和数据库回读。
+
+源码提交 [`3d8313c`](https://github.com/xmhuangzhijun-hue/iaa-ops-platform/commit/3d8313c098c05156fe06abc250837e7f2948eb96) 的公开 [CI 35258094651](https://github.com/xmhuangzhijun-hue/iaa-ops-platform/actions/runs/35258094651) 四个作业全部成功：Java、Python、前端、双后端对照。已下载核对对照产物：57 项、0 失败、0 契约错误、17 项登记的有意差异。此对照覆盖既有业务，不把它当成新 Agent 7 个接口的全部验收；后者由专项测试和真实回执覆盖。
 
 ## 交付边界
 
