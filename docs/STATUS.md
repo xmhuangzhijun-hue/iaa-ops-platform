@@ -31,7 +31,7 @@
 
 ## CI 与发布边界
 
-CI 配置包含 Python、Java Testcontainers、前端与同库双后端对照。前一轮在本机全新临时库跑过等价流程：57 项、0 失败、0 契约错误、17 处已解释差异。首次远端 CI 结果在推送后记录。执行状态以 [Actions](https://github.com/xmhuangzhijun-hue/iaa-ops-platform/actions) 对应提交的实际作业为准。
+CI 包含 Python、Java Testcontainers、前端与同库双后端对照。2026-09-17 首次远端完整运行 [35212699260](https://github.com/xmhuangzhijun-hue/iaa-ops-platform/actions/runs/35212699260) 四个作业全部通过；同库对照日志已成功上传并下载核对。首次推送发现的工作流上下文错误及修正记录见 [公开 CI 验证](../reports/publication-ci.md)。后续版本以 [Actions](https://github.com/xmhuangzhijun-hue/iaa-ops-platform/actions) 对应提交的实际作业为准。
 
 公开仓库：[iaa-ops-platform](https://github.com/xmhuangzhijun-hue/iaa-ops-platform)。采用经审查的源码快照作为公开初始历史，提交使用维护者的 GitHub noreply 身份；原本地历史另行保留。原后台截图分析材料不进入公开源码。没有公网部署；公网只读 demo 的密钥、账号、入口和代理配置另按发布清单验收。
 
