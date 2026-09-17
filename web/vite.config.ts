@@ -7,6 +7,8 @@ import { defineConfig } from "vite";
 const apiTarget = process.env.VITE_API_TARGET ?? "http://127.0.0.1:8080";
 
 export default defineConfig({
+  // 将预构建缓存放在项目内，避免本地依赖链接切换时复用其他工作区的缓存。
+  cacheDir: ".local/vite-cache",
   plugins: [react(), tailwindcss()],
   server: {
     port: 5173,

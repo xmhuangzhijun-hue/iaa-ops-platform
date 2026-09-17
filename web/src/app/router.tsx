@@ -19,6 +19,7 @@ const RawDetailPage = lazy(() => import("../pages/RawDetailPage").then((m) => ({
 const RoiAnomaliesPage = lazy(() => import("../pages/RoiAnomaliesPage").then((m) => ({ default: m.RoiAnomaliesPage })));
 const TrendPage = lazy(() => import("../pages/TrendPage").then((m) => ({ default: m.TrendPage })));
 const UsersPage = lazy(() => import("../pages/UsersPage").then((m) => ({ default: m.UsersPage })));
+const WorkspacePage = lazy(() => import("../pages/WorkspacePage").then((m) => ({ default: m.WorkspacePage })));
 
 const page = (element: ReactNode) => <Suspense fallback={<FullScreenLoading />}>{element}</Suspense>;
 
@@ -49,6 +50,7 @@ export const router = createBrowserRouter([
     ),
     children: [
       { index: true, element: <HomeRedirect /> },
+      { path: "workspace", element: page(<WorkspacePage />) },
       { path: "analysis/aggregate", element: page(<AggregatePage />) },
       { path: "analysis/daily", element: page(<DailyPage />) },
       { path: "analysis/trend", element: page(<TrendPage />) },

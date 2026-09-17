@@ -42,7 +42,7 @@ class IamApiTest extends PostgresTestBase {
                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokens.get("access_token")));
         assertThat(me.get("username")).isEqualTo("t.op");
         assertThat(strings(me.get("roles"))).containsExactly("operator");
-        assertThat(strings(me.get("permissions"))).containsExactly("dashboard.read", "metrics.real");
+        assertThat(strings(me.get("permissions"))).containsExactly("agent.execute", "dashboard.read", "metrics.real");
         assertThat(map(me.get("data_scope")).get("operators")).isEqualTo(List.of("运营甲"));
         assertThat(strings(me.get("visible_metrics"))).contains("revenue", "roi");
         assertThat(list(me.get("navigation"))).isNotEmpty();

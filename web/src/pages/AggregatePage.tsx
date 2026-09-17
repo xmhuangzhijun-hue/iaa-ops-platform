@@ -19,7 +19,7 @@ const DIMENSIONS: Dimension[] = ["media", "product", "agency", "account", "opera
 const DEFAULT_METRICS: MetricKey[] = ["cost", "revenue", "roi", "clicks", "cpc", "click_arpu", "ctr", "cvr"];
 const ROW_LIMIT = 500;
 
-export function AggregatePage() {
+export function AggregatePage({ embedded = false }: { embedded?: boolean }) {
   const { filters, refreshToken } = useFilters();
   const metrics = useScreenMetrics(SCREEN, DEFAULT_METRICS);
   const [groupBy, setGroupBy] = useSessionState<Dimension[]>(`iaa.group.${SCREEN}`, ["product"]);
@@ -42,12 +42,13 @@ export function AggregatePage() {
 
   return (
     <div className="space-y-4">
-      <PageHeader
+      {!embedded && <PageHeader
         title="聚合"
         description="按所选维度汇总当前筛选范围，合计与比率均由汇总值重算。"
         asOf={data?.data_as_of}
         actions={<ExportButton view="aggregate" body={body} disabled={!data} />}
-      />
+      />}
+      {embedded && <div className="workspace-data-toolbar"><span>当前账号的可见数据 · 服务端按权限返回指标</span><ExportButton view="aggregate" body={body} disabled={!data} /></div>}
       <FilterBar />
       <div className="card flex flex-wrap items-center justify-between gap-3 p-3">
         <DimensionPicker available={DIMENSIONS} value={groupBy} onChange={setGroupBy} />
@@ -57,7 +58,7 @@ export function AggregatePage() {
         <ErrorBlock error={report.error} onRetry={() => void report.refetch()} />
       ) : (
         <>
-          <KpiRow columns={data?.columns} totals={data?.totals} />
+          {!embedded && <KpiRow columns={data?.columns} totals={data?.totals} />}
           <DataGrid
             columns={data?.columns ?? []}
             rows={data?.rows ?? []}

@@ -612,6 +612,7 @@
                         "operator"
                       ],
                       "permissions": [
+                        "agent.execute",
                         "dashboard.read",
                         "metrics.real"
                       ],
@@ -3189,6 +3190,741 @@
         },
         "x-implementation-source": "backend-java/src/main/java/com/iaaops/governance/web/AuditController.java"
       }
+    },
+    "/api/v1/agent/capabilities": {
+      "get": {
+        "operationId": "getAgentCapabilities",
+        "summary": "查询助手可用状态",
+        "tags": [
+          "Agent工作台"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "x-requirements": [
+          "REQ-AGENT-001",
+          "REQ-AGENT-002"
+        ],
+        "x-screens": [
+          "agent-workspace"
+        ],
+        "x-implementation": "implemented",
+        "x-implementation-source": "backend-java/src/main/java/com/iaaops/agent/web/AgentController.java",
+        "x-reference-implementation": {
+          "runtime": "FastAPI",
+          "status": "not_available"
+        },
+        "responses": {
+          "200": {
+            "description": "成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AgentCapabilities"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "登录失效",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "无权限或授权已变化",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "目标不可见",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "请求、状态、版本冲突或任务容量已满",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "输入校验失败",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "501": {
+            "description": "模型接口尚未配置",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/agent/campaigns": {
+      "get": {
+        "operationId": "listAgentCampaigns",
+        "summary": "查询授权范围内的虚构计划",
+        "tags": [
+          "Agent工作台"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "x-requirements": [
+          "REQ-AGENT-002",
+          "REQ-AGENT-003"
+        ],
+        "x-screens": [
+          "agent-workspace"
+        ],
+        "x-implementation": "implemented",
+        "x-implementation-source": "backend-java/src/main/java/com/iaaops/agent/web/AgentController.java",
+        "x-reference-implementation": {
+          "runtime": "FastAPI",
+          "status": "not_available"
+        },
+        "responses": {
+          "200": {
+            "description": "成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AgentCampaignList"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "登录失效",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "无权限或授权已变化",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "目标不可见",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "请求、状态、版本冲突或任务容量已满",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "输入校验失败",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "501": {
+            "description": "模型接口尚未配置",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/agent/runs": {
+      "get": {
+        "operationId": "listAgentRuns",
+        "summary": "查询本人运行记录",
+        "tags": [
+          "Agent工作台"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "x-requirements": [
+          "REQ-AGENT-002",
+          "REQ-AGENT-007"
+        ],
+        "x-screens": [
+          "agent-workspace"
+        ],
+        "x-implementation": "implemented",
+        "x-implementation-source": "backend-java/src/main/java/com/iaaops/agent/web/AgentController.java",
+        "x-reference-implementation": {
+          "runtime": "FastAPI",
+          "status": "not_available"
+        },
+        "responses": {
+          "200": {
+            "description": "成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AgentRunList"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "登录失效",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "无权限或授权已变化",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "目标不可见",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "请求、状态、版本冲突或任务容量已满",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "输入校验失败",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "501": {
+            "description": "模型接口尚未配置",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "operationId": "createAgentRun",
+        "summary": "提交模型任务",
+        "tags": [
+          "Agent工作台"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "x-requirements": [
+          "REQ-AGENT-001",
+          "REQ-AGENT-002",
+          "REQ-AGENT-003",
+          "REQ-AGENT-007"
+        ],
+        "x-screens": [
+          "agent-workspace"
+        ],
+        "x-implementation": "implemented",
+        "x-implementation-source": "backend-java/src/main/java/com/iaaops/agent/web/AgentController.java",
+        "x-reference-implementation": {
+          "runtime": "FastAPI",
+          "status": "not_available"
+        },
+        "responses": {
+          "202": {
+            "description": "成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AgentRun"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "登录失效",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "无权限或授权已变化",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "目标不可见",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "请求、状态、版本冲突或任务容量已满",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "输入校验失败",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "501": {
+            "description": "模型接口尚未配置",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AgentSubmit"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/agent/runs/{run_id}": {
+      "get": {
+        "operationId": "getAgentRun",
+        "summary": "回读本人任务和证据",
+        "tags": [
+          "Agent工作台"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "x-requirements": [
+          "REQ-AGENT-002",
+          "REQ-AGENT-003",
+          "REQ-AGENT-007"
+        ],
+        "x-screens": [
+          "agent-workspace"
+        ],
+        "x-implementation": "implemented",
+        "x-implementation-source": "backend-java/src/main/java/com/iaaops/agent/web/AgentController.java",
+        "x-reference-implementation": {
+          "runtime": "FastAPI",
+          "status": "not_available"
+        },
+        "responses": {
+          "200": {
+            "description": "成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AgentRun"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "登录失效",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "无权限或授权已变化",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "目标不可见",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "请求、状态、版本冲突或任务容量已满",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "输入校验失败",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "501": {
+            "description": "模型接口尚未配置",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "run_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      }
+    },
+    "/api/v1/agent/runs/{run_id}/decision": {
+      "post": {
+        "operationId": "decideAgentRun",
+        "summary": "确认或拒绝具体沙箱变更",
+        "tags": [
+          "Agent工作台"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "x-requirements": [
+          "REQ-AGENT-002",
+          "REQ-AGENT-004",
+          "REQ-AGENT-005"
+        ],
+        "x-screens": [
+          "agent-workspace"
+        ],
+        "x-implementation": "implemented",
+        "x-implementation-source": "backend-java/src/main/java/com/iaaops/agent/web/AgentController.java",
+        "x-reference-implementation": {
+          "runtime": "FastAPI",
+          "status": "not_available"
+        },
+        "responses": {
+          "200": {
+            "description": "成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AgentRun"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "登录失效",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "无权限或授权已变化",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "目标不可见",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "请求、状态、版本冲突或任务容量已满",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "输入校验失败",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "501": {
+            "description": "模型接口尚未配置",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AgentDecision"
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "run_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      }
+    },
+    "/api/v1/agent/receipts": {
+      "get": {
+        "operationId": "listAgentReceipts",
+        "summary": "查询本人沙箱执行回执",
+        "tags": [
+          "Agent工作台"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "x-requirements": [
+          "REQ-AGENT-002",
+          "REQ-AGENT-005"
+        ],
+        "x-screens": [
+          "agent-workspace"
+        ],
+        "x-implementation": "implemented",
+        "x-implementation-source": "backend-java/src/main/java/com/iaaops/agent/web/AgentController.java",
+        "x-reference-implementation": {
+          "runtime": "FastAPI",
+          "status": "not_available"
+        },
+        "responses": {
+          "200": {
+            "description": "成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AgentReceiptList"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "登录失效",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "无权限或授权已变化",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "目标不可见",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "请求、状态、版本冲突或任务容量已满",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "输入校验失败",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "501": {
+            "description": "模型接口尚未配置",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -5206,6 +5942,583 @@
           "revision"
         ],
         "title": "UserSummary"
+      },
+      "AgentSubmit": {
+        "additionalProperties": false,
+        "properties": {
+          "prompt": {
+            "maxLength": 4000,
+            "minLength": 1,
+            "title": "Prompt",
+            "type": "string"
+          },
+          "request_id": {
+            "pattern": "^[a-zA-Z0-9_-]{1,64}$",
+            "title": "Request Id",
+            "type": "string"
+          },
+          "context": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Context"
+          }
+        },
+        "required": [
+          "prompt",
+          "request_id"
+        ],
+        "title": "AgentSubmit",
+        "type": "object"
+      },
+      "AgentDecision": {
+        "additionalProperties": false,
+        "properties": {
+          "approve": {
+            "title": "Approve",
+            "type": "boolean"
+          },
+          "request_id": {
+            "pattern": "^[a-zA-Z0-9_-]{1,64}$",
+            "title": "Request Id",
+            "type": "string"
+          },
+          "proposal_id": {
+            "maxLength": 32,
+            "minLength": 1,
+            "title": "Proposal Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "approve",
+          "request_id",
+          "proposal_id"
+        ],
+        "title": "AgentDecision",
+        "type": "object"
+      },
+      "AgentCapabilities": {
+        "properties": {
+          "available": {
+            "title": "Available",
+            "type": "boolean"
+          },
+          "model": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Model"
+          },
+          "unavailable_reason": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Unavailable Reason"
+          },
+          "can_execute": {
+            "title": "Can Execute",
+            "type": "boolean"
+          },
+          "execution_mode": {
+            "title": "Execution Mode",
+            "type": "string"
+          },
+          "max_steps": {
+            "title": "Max Steps",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "available",
+          "model",
+          "unavailable_reason",
+          "can_execute",
+          "execution_mode",
+          "max_steps"
+        ],
+        "title": "AgentCapabilities",
+        "type": "object"
+      },
+      "AgentCampaign": {
+        "properties": {
+          "id": {
+            "title": "Id",
+            "type": "string"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "media": {
+            "title": "Media",
+            "type": "string"
+          },
+          "account": {
+            "title": "Account",
+            "type": "string"
+          },
+          "campaign": {
+            "title": "Campaign",
+            "type": "string"
+          },
+          "agency": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Agency"
+          },
+          "product": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Product"
+          },
+          "operator": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Operator"
+          },
+          "bid": {
+            "title": "Bid",
+            "type": "number"
+          },
+          "daily_budget": {
+            "title": "Daily Budget",
+            "type": "number"
+          },
+          "revision": {
+            "title": "Revision",
+            "type": "integer"
+          },
+          "execution_mode": {
+            "title": "Execution Mode",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "media",
+          "account",
+          "campaign",
+          "agency",
+          "product",
+          "operator",
+          "bid",
+          "daily_budget",
+          "revision",
+          "execution_mode"
+        ],
+        "title": "AgentCampaign",
+        "type": "object"
+      },
+      "AgentCampaignList": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/AgentCampaign"
+            },
+            "title": "Items",
+            "type": "array"
+          }
+        },
+        "required": [
+          "items"
+        ],
+        "title": "AgentCampaignList",
+        "type": "object"
+      },
+      "AgentAmounts": {
+        "properties": {
+          "bid": {
+            "title": "Bid",
+            "type": "number"
+          },
+          "daily_budget": {
+            "title": "Daily Budget",
+            "type": "number"
+          }
+        },
+        "required": [
+          "bid",
+          "daily_budget"
+        ],
+        "title": "AgentAmounts",
+        "type": "object"
+      },
+      "AgentAppliedChange": {
+        "properties": {
+          "campaign_id": {
+            "title": "Campaign Id",
+            "type": "string"
+          },
+          "campaign_name": {
+            "title": "Campaign Name",
+            "type": "string"
+          },
+          "account": {
+            "title": "Account",
+            "type": "string"
+          },
+          "revision": {
+            "title": "Revision",
+            "type": "integer"
+          },
+          "before": {
+            "$ref": "#/components/schemas/AgentAmounts"
+          },
+          "after": {
+            "$ref": "#/components/schemas/AgentAmounts"
+          },
+          "new_revision": {
+            "title": "New Revision",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "campaign_id",
+          "campaign_name",
+          "account",
+          "revision",
+          "before",
+          "after",
+          "new_revision"
+        ],
+        "title": "AgentAppliedChange",
+        "type": "object"
+      },
+      "AgentChange": {
+        "properties": {
+          "campaign_id": {
+            "title": "Campaign Id",
+            "type": "string"
+          },
+          "campaign_name": {
+            "title": "Campaign Name",
+            "type": "string"
+          },
+          "account": {
+            "title": "Account",
+            "type": "string"
+          },
+          "revision": {
+            "title": "Revision",
+            "type": "integer"
+          },
+          "before": {
+            "$ref": "#/components/schemas/AgentAmounts"
+          },
+          "after": {
+            "$ref": "#/components/schemas/AgentAmounts"
+          }
+        },
+        "required": [
+          "campaign_id",
+          "campaign_name",
+          "account",
+          "revision",
+          "before",
+          "after"
+        ],
+        "title": "AgentChange",
+        "type": "object"
+      },
+      "AgentEvent": {
+        "properties": {
+          "id": {
+            "title": "Id",
+            "type": "string"
+          },
+          "tool": {
+            "title": "Tool",
+            "type": "string"
+          },
+          "status": {
+            "title": "Status",
+            "type": "string"
+          },
+          "summary": {
+            "title": "Summary",
+            "type": "string"
+          },
+          "arguments": {
+            "additionalProperties": true,
+            "title": "Arguments",
+            "type": "object"
+          },
+          "result": {
+            "title": "Result"
+          },
+          "created_at": {
+            "format": "date-time",
+            "title": "Created At",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "tool",
+          "status",
+          "summary",
+          "arguments",
+          "result",
+          "created_at"
+        ],
+        "title": "AgentEvent",
+        "type": "object"
+      },
+      "AgentProposal": {
+        "properties": {
+          "id": {
+            "title": "Id",
+            "type": "string"
+          },
+          "status": {
+            "title": "Status",
+            "type": "string"
+          },
+          "summary": {
+            "title": "Summary",
+            "type": "string"
+          },
+          "changes": {
+            "items": {
+              "$ref": "#/components/schemas/AgentChange"
+            },
+            "title": "Changes",
+            "type": "array"
+          },
+          "expires_at": {
+            "format": "date-time",
+            "title": "Expires At",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "status",
+          "summary",
+          "changes",
+          "expires_at"
+        ],
+        "title": "AgentProposal",
+        "type": "object"
+      },
+      "AgentReceipt": {
+        "properties": {
+          "id": {
+            "title": "Id",
+            "type": "string"
+          },
+          "run_id": {
+            "title": "Run Id",
+            "type": "string"
+          },
+          "proposal_id": {
+            "title": "Proposal Id",
+            "type": "string"
+          },
+          "execution_mode": {
+            "title": "Execution Mode",
+            "type": "string"
+          },
+          "status": {
+            "title": "Status",
+            "type": "string"
+          },
+          "changes": {
+            "items": {
+              "$ref": "#/components/schemas/AgentAppliedChange"
+            },
+            "title": "Changes",
+            "type": "array"
+          },
+          "created_at": {
+            "format": "date-time",
+            "title": "Created At",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "run_id",
+          "proposal_id",
+          "execution_mode",
+          "status",
+          "changes",
+          "created_at"
+        ],
+        "title": "AgentReceipt",
+        "type": "object"
+      },
+      "AgentRun": {
+        "properties": {
+          "id": {
+            "title": "Id",
+            "type": "string"
+          },
+          "prompt": {
+            "title": "Prompt",
+            "type": "string"
+          },
+          "status": {
+            "enum": [
+              "running",
+              "awaiting_confirmation",
+              "succeeded",
+              "rejected",
+              "failed"
+            ],
+            "title": "Status",
+            "type": "string"
+          },
+          "answer": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Answer"
+          },
+          "error": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Error"
+          },
+          "events": {
+            "items": {
+              "$ref": "#/components/schemas/AgentEvent"
+            },
+            "title": "Events",
+            "type": "array"
+          },
+          "proposal": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/AgentProposal"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "receipt": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/AgentReceipt"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "created_at": {
+            "format": "date-time",
+            "title": "Created At",
+            "type": "string"
+          },
+          "finished_at": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Finished At"
+          }
+        },
+        "required": [
+          "id",
+          "prompt",
+          "status",
+          "answer",
+          "error",
+          "events",
+          "proposal",
+          "receipt",
+          "created_at",
+          "finished_at"
+        ],
+        "title": "AgentRun",
+        "type": "object"
+      },
+      "AgentRunList": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/AgentRun"
+            },
+            "title": "Items",
+            "type": "array"
+          }
+        },
+        "required": [
+          "items"
+        ],
+        "title": "AgentRunList",
+        "type": "object"
+      },
+      "AgentReceiptList": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/AgentReceipt"
+            },
+            "title": "Items",
+            "type": "array"
+          }
+        },
+        "required": [
+          "items"
+        ],
+        "title": "AgentReceiptList",
+        "type": "object"
       }
     },
     "securitySchemes": {

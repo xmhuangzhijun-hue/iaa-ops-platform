@@ -12,7 +12,7 @@ import { queryBase, useFilters } from "../filters/FilterProvider";
 
 const PAGE_SIZE = 100;
 
-export function RawDetailPage() {
+export function RawDetailPage({ embedded = false }: { embedded?: boolean }) {
   const { filters, refreshToken } = useFilters();
   const [page, setPage] = useState(1);
   const [sort, setSort] = useState<Schemas["SortSpec"][]>([]);
@@ -36,12 +36,13 @@ export function RawDetailPage() {
 
   return (
     <div className="space-y-4">
-      <PageHeader
+      {!embedded && <PageHeader
         title="原始明细"
         description="不做汇总的入库明细，用于核对导入数据；关键词匹配账户、计划与产品。"
         asOf={result.data?.data_as_of}
         actions={<ExportButton view="raw" body={base} disabled={!result.data} />}
-      />
+      />}
+      {embedded && <div className="workspace-data-toolbar"><span>入库明细 · {result.data?.data_as_of ? `更新于 ${new Date(result.data.data_as_of).toLocaleString("zh-CN")}` : "读取数据中"}</span><ExportButton view="raw" body={base} disabled={!result.data} /></div>}
       <FilterBar keywordPlaceholder="搜索账户、计划或产品" />
       {result.isError ? (
         <ErrorBlock error={result.error} onRetry={() => void result.refetch()} />
@@ -53,7 +54,7 @@ export function RawDetailPage() {
             totals={result.data?.totals}
             loading={result.isFetching}
             onServerSort={onServerSort}
-            height={600}
+            height={embedded ? 530 : 600}
             caption={result.data && <RowCount total={total} shown={total} />}
           />
           <nav className="flex items-center justify-end gap-2 text-sm" aria-label="分页">

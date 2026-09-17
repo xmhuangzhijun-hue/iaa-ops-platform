@@ -1,0 +1,579 @@
+{
+  "observed_at": "2026-09-17T18:16:20.333907+00:00",
+  "data": "synthetic",
+  "execution": "local sandbox only",
+  "source": "API readback after browser QA",
+  "campaign_after_approve_and_reject": {
+    "id": "demo_plan_004",
+    "name": "脑力答题王 · plan-004",
+    "media": "xiaomi",
+    "account": "xiaomi-demo-004",
+    "campaign": "plan-004",
+    "agency": "星河代理",
+    "product": "脑力答题王",
+    "operator": "运营甲",
+    "bid": 1.6,
+    "daily_budget": 3001.0,
+    "revision": 2,
+    "execution_mode": "sandbox"
+  },
+  "runs": [
+    {
+      "id": "run_nf2hwvjnu74a",
+      "prompt": "将我选中的「脑力答题王 · plan-004」日预算从 3001.00 元改为 3002.00 元，出价保持 1.60 元。只给这一条待确认提案，不直接执行。",
+      "status": "rejected",
+      "answer": "**提案已生成，状态 pending，未执行** [E2]\n\n| 项 | 变更前 | 变更后 |\n|---|---|---|\n| 计划 | 脑力答题王 · plan-004（demo_plan_004，xiaomi-demo-004） | 同 |\n| 日预算 | 3001.00 元 | 3002.00 元 |\n| 出价 | 1.60 元 | 1.60 元（不变） |\n| 修订版本 | revision=2 | 基于 revision=2 提交 |\n\n- 提案 ID：`prp_pguye5eqmnr3`，过期时间 2026-09-17T18:44:40Z [E2]\n- 仅此一条变更，未包含其他计划。\n\n**说明与建议**\n- 该提案仅写入本机 sandbox 配置，未连接任何广告媒体平台；需你明确批准后才会生效，工具本身无执行权限。\n- 本次为 +1.00 元的预算微调，出价未动，对投放节奏影响可忽略；若你的真实意图是更大幅度的预算调整，请告知目标值，我可重新出提案（同一轮只保留一条提案）。\n- 注意提案过期时间早于当前日期 2026-09-18，若已过期需重新生成。",
+      "error": null,
+      "events": [
+        {
+          "id": "E1",
+          "tool": "list_campaigns",
+          "status": "succeeded",
+          "summary": "工具已返回结果",
+          "arguments": {},
+          "result": {
+            "items": [
+              {
+                "id": "demo_plan_003",
+                "bid": 1.5,
+                "name": "步数宝 · plan-003",
+                "media": "huawei",
+                "agency": "青橙代理",
+                "account": "huawei-demo-003",
+                "product": "步数宝",
+                "campaign": "plan-003",
+                "operator": "运营甲",
+                "revision": 2,
+                "daily_budget": 2600.0,
+                "execution_mode": "sandbox"
+              },
+              {
+                "id": "demo_plan_004",
+                "bid": 1.6,
+                "name": "脑力答题王 · plan-004",
+                "media": "xiaomi",
+                "agency": "星河代理",
+                "account": "xiaomi-demo-004",
+                "product": "脑力答题王",
+                "campaign": "plan-004",
+                "operator": "运营甲",
+                "revision": 2,
+                "daily_budget": 3001.0,
+                "execution_mode": "sandbox"
+              },
+              {
+                "id": "demo_plan_005",
+                "bid": 1.2,
+                "name": "萌宠消消乐 · plan-005",
+                "media": "vivo",
+                "agency": "蓝鲸代理",
+                "account": "vivo-demo-005",
+                "product": "萌宠消消乐",
+                "campaign": "plan-005",
+                "operator": "运营甲",
+                "revision": 1,
+                "daily_budget": 3500.0,
+                "execution_mode": "sandbox"
+              },
+              {
+                "id": "demo_plan_011",
+                "bid": 1.3,
+                "name": "步数宝 · plan-011",
+                "media": "huawei",
+                "agency": "蓝鲸代理",
+                "account": "huawei-demo-011",
+                "product": "步数宝",
+                "campaign": "plan-011",
+                "operator": "运营甲",
+                "revision": 1,
+                "daily_budget": 3500.0,
+                "execution_mode": "sandbox"
+              },
+              {
+                "id": "demo_plan_033",
+                "bid": 1.5,
+                "name": "每日菜谱 · plan-033",
+                "media": "vivo",
+                "agency": "青橙代理",
+                "account": "vivo-demo-033",
+                "product": "每日菜谱",
+                "campaign": "plan-033",
+                "operator": "运营甲",
+                "revision": 1,
+                "daily_budget": 2500.0,
+                "execution_mode": "sandbox"
+              }
+            ]
+          },
+          "created_at": "2026-09-17T18:14:39.2483587Z"
+        },
+        {
+          "id": "E2",
+          "tool": "propose_change",
+          "status": "succeeded",
+          "summary": "工具已返回结果",
+          "arguments": {
+            "changes": [
+              {
+                "bid": 1.6,
+                "revision": 2,
+                "campaign_id": "demo_plan_004",
+                "daily_budget": 3002.0
+              }
+            ],
+            "summary": "将「脑力答题王 · plan-004」(demo_plan_004) 的日预算由 3001.00 元调整为 3002.00 元，出价保持 1.60 元不变。基于当前 revision=2 提交，仅此一条变更。"
+          },
+          "result": {
+            "id": "prp_pguye5eqmnr3",
+            "status": "pending",
+            "changes": [
+              {
+                "after": {
+                  "bid": 1.6,
+                  "daily_budget": 3002.0
+                },
+                "before": {
+                  "bid": 1.6,
+                  "daily_budget": 3001.0
+                },
+                "account": "xiaomi-demo-004",
+                "revision": 2,
+                "campaign_id": "demo_plan_004",
+                "campaign_name": "脑力答题王 · plan-004"
+              }
+            ],
+            "summary": "将「脑力答题王 · plan-004」(demo_plan_004) 的日预算由 3001.00 元调整为 3002.00 元，出价保持 1.60 元不变。基于当前 revision=2 提交，仅此一条变更。",
+            "expires_at": "2026-09-17T18:44:40.744872Z"
+          },
+          "created_at": "2026-09-17T18:14:40.6780123Z"
+        }
+      ],
+      "proposal": {
+        "id": "prp_pguye5eqmnr3",
+        "status": "rejected",
+        "summary": "将「脑力答题王 · plan-004」(demo_plan_004) 的日预算由 3001.00 元调整为 3002.00 元，出价保持 1.60 元不变。基于当前 revision=2 提交，仅此一条变更。",
+        "changes": [
+          {
+            "campaign_id": "demo_plan_004",
+            "campaign_name": "脑力答题王 · plan-004",
+            "account": "xiaomi-demo-004",
+            "revision": 2,
+            "before": {
+              "bid": 1.6,
+              "daily_budget": 3001.0
+            },
+            "after": {
+              "bid": 1.6,
+              "daily_budget": 3002.0
+            }
+          }
+        ],
+        "expires_at": "2026-09-17T18:44:40.744872Z"
+      },
+      "receipt": null,
+      "created_at": "2026-09-17T18:14:38.671862Z",
+      "finished_at": "2026-09-17T18:15:20.556864Z"
+    },
+    {
+      "id": "run_t7p9n3yarvw8",
+      "prompt": "请先按当前页面日期范围查询 xiaomi-demo-004 的消耗与收益，用简短表格展示并给出来源；然后把我选中的「脑力答题王 · plan-004」日预算从 3000.00 元改为 3001.00 元，出价保持 1.60 元，只生成这一条待确认提案。不要调整其他计划，也不要直接执行。",
+      "status": "succeeded",
+      "answer": "## 一、xiaomi-demo-004 消耗与收益（2026-09-11 ~ 2026-09-17）\n\n| 产品 | 消耗(元) | 预估收益(元) | ROI | 曝光 | 点击 | 转化数 |\n|---|---|---|---|---|---|---|\n| 脑力答题王 | 27,063.91 | 32,919.44 | 1.216 | 1,238,560 | 69,940 | 6,115 |\n\n- 来源：`aggregate` 视图，筛选 `accounts=[\"xiaomi-demo-004\"]`，日期 2026-09-11~2026-09-17，返回 1 行（total_rows=1），数据截至 2026-09-17T17:49Z [E3]。\n- 指标口径来自指标定义表：消耗=sum(cost)、预估收益=sum(revenue)、ROI=revenue/cost（汇总行按总收益/总消耗重算）[E1]。\n- 事实：该账户区间内消耗 27,063.91 元、预估收益 32,919.44 元，ROI 1.216（即约 121.6%），回收差额约 +5,855.53 元（按定义 revenue−cost 推算 [E1]）。\n- 说明：页面 keyword 为空，故未附加关键词筛选；本次仅按账户维度汇总，未做日/小时拆分，因此无法判断趋势或波动原因。\n\n## 二、待确认提案（未执行）\n\n| 计划 | 账户 | 当前 revision | 日预算 前→后 | 出价 前→后 |\n|---|---|---|---|---|\n| 脑力答题王 · plan-004 (demo_plan_004) | xiaomi-demo-004 | 1 | 3,000.00 → 3,001.00 | 1.60 → 1.60（不变） |\n\n- 提案 ID：`prp_iupsb4zvpsu5`，状态 **pending**，有效期至 2026-09-17T18:43Z [E4]。\n- 仅含 1 条变更，未涉及其他计划；出价按你的要求保持 1.60 元 [E4]。\n- 该提案只是本机 sandbox 配置变更，未连接任何广告媒体平台，工具无执行权限；需你点击批准后才会生效。\n\n## 三、提示与建议\n\n- 本次预算调整幅度为 +1.00 元（+0.03%），对投放量的实际影响预计可忽略；若目标是提升跑量，建议明确目标幅度后再提。\n- 若想判断是否值得加预算，可补充查询该计划的 `daily` 或 `trend` 视图，看消耗是否长期贴近 3,000 元上限（预算受限信号）以及 ROI 是否稳定在 1.2 附近——目前证据不足以支持该结论。\n- 需要我按日拆分或对比其他计划时，请告知具体范围。",
+      "error": null,
+      "events": [
+        {
+          "id": "E1",
+          "tool": "query_metrics",
+          "status": "succeeded",
+          "summary": "工具已返回结果",
+          "arguments": {},
+          "result": {
+            "items": [
+              {
+                "key": "cost",
+                "label": "消耗",
+                "formula": "sum(cost)",
+                "description": "媒体平台同步的投放消耗。"
+              },
+              {
+                "key": "revenue",
+                "label": "预估收益",
+                "formula": "sum(revenue)",
+                "description": "客户端变现的预估收益。"
+              },
+              {
+                "key": "impressions",
+                "label": "曝光",
+                "formula": "sum(impressions)",
+                "description": "媒体平台同步的曝光次数。"
+              },
+              {
+                "key": "clicks",
+                "label": "点击",
+                "formula": "sum(clicks)",
+                "description": "媒体平台同步的点击次数。"
+              },
+              {
+                "key": "launches",
+                "label": "启动数",
+                "formula": "sum(launches)",
+                "description": "快应用被拉起的次数。"
+              },
+              {
+                "key": "callbacks",
+                "label": "回传数",
+                "formula": "sum(callbacks)",
+                "description": "按回传规则回传给媒体的转化数。"
+              },
+              {
+                "key": "conversions",
+                "label": "转化数",
+                "formula": "sum(conversions)",
+                "description": "满足转化规则的转化数。"
+              },
+              {
+                "key": "roi",
+                "label": "ROI",
+                "formula": "revenue / cost",
+                "description": "预估收益与消耗之比；汇总行用总收益 / 总消耗重算。"
+              },
+              {
+                "key": "ctr",
+                "label": "点击率",
+                "formula": "clicks / impressions",
+                "description": "曝光到点击的比例。"
+              },
+              {
+                "key": "cpm",
+                "label": "CPM",
+                "formula": "cost / impressions × 1000",
+                "description": "千次曝光成本。"
+              },
+              {
+                "key": "cpc",
+                "label": "CPC",
+                "formula": "cost / clicks",
+                "description": "每次点击成本。"
+              },
+              {
+                "key": "click_arpu",
+                "label": "点击 ARPU",
+                "formula": "revenue / clicks",
+                "description": "每次点击带来的预估收益。"
+              },
+              {
+                "key": "launch_rate",
+                "label": "启动率",
+                "formula": "launches / clicks",
+                "description": "点击到启动的跳转率。"
+              },
+              {
+                "key": "cvr",
+                "label": "转化率",
+                "formula": "conversions / clicks",
+                "description": "点击到转化的比例。"
+              },
+              {
+                "key": "conversion_cost",
+                "label": "转化成本",
+                "formula": "cost / conversions",
+                "description": "每次转化对应的消耗。"
+              },
+              {
+                "key": "callback_cost",
+                "label": "回传成本",
+                "formula": "cost / callbacks",
+                "description": "每次回传对应的消耗。"
+              },
+              {
+                "key": "launch_callback_rate",
+                "label": "启动→回传率",
+                "formula": "callbacks / launches",
+                "description": "启动到回传的比例。"
+              },
+              {
+                "key": "revenue_gap",
+                "label": "回收差额",
+                "formula": "revenue - cost",
+                "description": "预估收益减消耗。"
+              }
+            ]
+          },
+          "created_at": "2026-09-17T18:13:07.0262215Z"
+        },
+        {
+          "id": "E2",
+          "tool": "list_campaigns",
+          "status": "succeeded",
+          "summary": "工具已返回结果",
+          "arguments": {},
+          "result": {
+            "items": [
+              {
+                "id": "demo_plan_003",
+                "bid": 1.5,
+                "name": "步数宝 · plan-003",
+                "media": "huawei",
+                "agency": "青橙代理",
+                "account": "huawei-demo-003",
+                "product": "步数宝",
+                "campaign": "plan-003",
+                "operator": "运营甲",
+                "revision": 2,
+                "daily_budget": 2600.0,
+                "execution_mode": "sandbox"
+              },
+              {
+                "id": "demo_plan_004",
+                "bid": 1.6,
+                "name": "脑力答题王 · plan-004",
+                "media": "xiaomi",
+                "agency": "星河代理",
+                "account": "xiaomi-demo-004",
+                "product": "脑力答题王",
+                "campaign": "plan-004",
+                "operator": "运营甲",
+                "revision": 1,
+                "daily_budget": 3000.0,
+                "execution_mode": "sandbox"
+              },
+              {
+                "id": "demo_plan_005",
+                "bid": 1.2,
+                "name": "萌宠消消乐 · plan-005",
+                "media": "vivo",
+                "agency": "蓝鲸代理",
+                "account": "vivo-demo-005",
+                "product": "萌宠消消乐",
+                "campaign": "plan-005",
+                "operator": "运营甲",
+                "revision": 1,
+                "daily_budget": 3500.0,
+                "execution_mode": "sandbox"
+              },
+              {
+                "id": "demo_plan_011",
+                "bid": 1.3,
+                "name": "步数宝 · plan-011",
+                "media": "huawei",
+                "agency": "蓝鲸代理",
+                "account": "huawei-demo-011",
+                "product": "步数宝",
+                "campaign": "plan-011",
+                "operator": "运营甲",
+                "revision": 1,
+                "daily_budget": 3500.0,
+                "execution_mode": "sandbox"
+              },
+              {
+                "id": "demo_plan_033",
+                "bid": 1.5,
+                "name": "每日菜谱 · plan-033",
+                "media": "vivo",
+                "agency": "青橙代理",
+                "account": "vivo-demo-033",
+                "product": "每日菜谱",
+                "campaign": "plan-033",
+                "operator": "运营甲",
+                "revision": 1,
+                "daily_budget": 2500.0,
+                "execution_mode": "sandbox"
+              }
+            ]
+          },
+          "created_at": "2026-09-17T18:13:07.050507Z"
+        },
+        {
+          "id": "E3",
+          "tool": "query_reports",
+          "status": "succeeded",
+          "summary": "工具已返回结果",
+          "arguments": {
+            "view": "aggregate",
+            "date_to": "2026-09-17",
+            "filters": {
+              "accounts": [
+                "xiaomi-demo-004"
+              ]
+            },
+            "metrics": [
+              "cost",
+              "revenue",
+              "roi",
+              "impressions",
+              "clicks",
+              "conversions"
+            ],
+            "date_from": "2026-09-11"
+          },
+          "result": {
+            "page": 1,
+            "rows": [
+              {
+                "roi": 1.216,
+                "cost": 27063.91,
+                "clicks": 69940,
+                "product": "脑力答题王",
+                "revenue": 32919.44,
+                "conversions": 6115,
+                "impressions": 1238560
+              }
+            ],
+            "totals": {
+              "roi": 1.216,
+              "cost": 27063.91,
+              "clicks": 69940,
+              "revenue": 32919.44,
+              "conversions": 6115,
+              "impressions": 1238560
+            },
+            "columns": [
+              {
+                "key": "product",
+                "kind": "dimension",
+                "unit": null,
+                "label": "产品",
+                "precision": null
+              },
+              {
+                "key": "cost",
+                "kind": "base",
+                "unit": "money",
+                "label": "消耗",
+                "precision": 2
+              },
+              {
+                "key": "revenue",
+                "kind": "base",
+                "unit": "money",
+                "label": "预估收益",
+                "precision": 2
+              },
+              {
+                "key": "roi",
+                "kind": "derived",
+                "unit": "ratio",
+                "label": "ROI",
+                "precision": 3
+              },
+              {
+                "key": "impressions",
+                "kind": "base",
+                "unit": "count",
+                "label": "曝光",
+                "precision": 0
+              },
+              {
+                "key": "clicks",
+                "kind": "base",
+                "unit": "count",
+                "label": "点击",
+                "precision": 0
+              },
+              {
+                "key": "conversions",
+                "kind": "base",
+                "unit": "count",
+                "label": "转化数",
+                "precision": 0
+              }
+            ],
+            "page_size": 50,
+            "data_as_of": "2026-09-17T17:49:42.180259Z",
+            "total_rows": 1
+          },
+          "created_at": "2026-09-17T18:13:08.0826172Z"
+        },
+        {
+          "id": "E4",
+          "tool": "propose_change",
+          "status": "succeeded",
+          "summary": "工具已返回结果",
+          "arguments": {
+            "changes": [
+              {
+                "bid": 1.6,
+                "revision": 1,
+                "campaign_id": "demo_plan_004",
+                "daily_budget": 3001.0
+              }
+            ],
+            "summary": "将「脑力答题王 · plan-004」(demo_plan_004, xiaomi-demo-004) 的日预算由 3000.00 元调整为 3001.00 元，出价保持 1.60 元不变。仅此一条，不涉及其他计划。当前 revision=1。"
+          },
+          "result": {
+            "id": "prp_iupsb4zvpsu5",
+            "status": "pending",
+            "changes": [
+              {
+                "after": {
+                  "bid": 1.6,
+                  "daily_budget": 3001.0
+                },
+                "before": {
+                  "bid": 1.6,
+                  "daily_budget": 3000.0
+                },
+                "account": "xiaomi-demo-004",
+                "revision": 1,
+                "campaign_id": "demo_plan_004",
+                "campaign_name": "脑力答题王 · plan-004"
+              }
+            ],
+            "summary": "将「脑力答题王 · plan-004」(demo_plan_004, xiaomi-demo-004) 的日预算由 3000.00 元调整为 3001.00 元，出价保持 1.60 元不变。仅此一条，不涉及其他计划。当前 revision=1。",
+            "expires_at": "2026-09-17T18:43:09.137586Z"
+          },
+          "created_at": "2026-09-17T18:13:09.066036Z"
+        }
+      ],
+      "proposal": {
+        "id": "prp_iupsb4zvpsu5",
+        "status": "approved",
+        "summary": "将「脑力答题王 · plan-004」(demo_plan_004, xiaomi-demo-004) 的日预算由 3000.00 元调整为 3001.00 元，出价保持 1.60 元不变。仅此一条，不涉及其他计划。当前 revision=1。",
+        "changes": [
+          {
+            "campaign_id": "demo_plan_004",
+            "campaign_name": "脑力答题王 · plan-004",
+            "account": "xiaomi-demo-004",
+            "revision": 1,
+            "before": {
+              "bid": 1.6,
+              "daily_budget": 3000.0
+            },
+            "after": {
+              "bid": 1.6,
+              "daily_budget": 3001.0
+            }
+          }
+        ],
+        "expires_at": "2026-09-17T18:43:09.137586Z"
+      },
+      "receipt": {
+        "id": "rcp_6kahf0vespew",
+        "run_id": "run_t7p9n3yarvw8",
+        "proposal_id": "prp_iupsb4zvpsu5",
+        "execution_mode": "sandbox",
+        "status": "executed",
+        "changes": [
+          {
+            "campaign_id": "demo_plan_004",
+            "campaign_name": "脑力答题王 · plan-004",
+            "account": "xiaomi-demo-004",
+            "revision": 1,
+            "before": {
+              "bid": 1.6,
+              "daily_budget": 3000.0
+            },
+            "after": {
+              "bid": 1.6,
+              "daily_budget": 3001.0
+            },
+            "new_revision": 2
+          }
+        ],
+        "created_at": "2026-09-17T18:13:51.358669Z"
+      },
+      "created_at": "2026-09-17T18:13:05.885203Z",
+      "finished_at": "2026-09-17T18:13:51.438656Z"
+    }
+  ]
+}

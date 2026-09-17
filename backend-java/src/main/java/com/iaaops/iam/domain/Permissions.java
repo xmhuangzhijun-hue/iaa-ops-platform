@@ -16,6 +16,7 @@ public final class Permissions {
     public static final String MAPPINGS_MANAGE = "mappings.manage";
     public static final String IMPORTS_MANAGE = "imports.manage";
     public static final String AUDIT_READ = "audit.read";
+    public static final String AGENT_EXECUTE = "agent.execute";
 
     private Permissions() {
     }

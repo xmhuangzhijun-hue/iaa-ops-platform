@@ -17,6 +17,7 @@ class ModuleBoundaryTest {
     private static final String[] MODULES = {
             "com.iaaops.iam..", "com.iaaops.reporting..", "com.iaaops.mapping..",
             "com.iaaops.governance..", "com.iaaops.ingestion..", "com.iaaops.system..",
+            "com.iaaops.agent..",
     };
 
     @ArchTest
@@ -55,9 +56,21 @@ class ModuleBoundaryTest {
     static final ArchRule ingestion_的_Web_层只属于_ingestion = webIsPrivate("ingestion");
 
     @ArchTest
-    static final ArchRule 报表模块不被其他模块依赖 = noClasses()
+    static final ArchRule 报表模块仅由Agent通过公开服务访问 = noClasses()
             .that().resideOutsideOfPackage("com.iaaops.reporting..")
+            .and().resideOutsideOfPackage("com.iaaops.agent..")
             .should().dependOnClassesThat().resideInAPackage("com.iaaops.reporting..");
+
+    @ArchTest
+    static final ArchRule agent_的持久层只属于_agent = persistenceIsPrivate("agent");
+
+    @ArchTest
+    static final ArchRule agent_的_Web_层只属于_agent = webIsPrivate("agent");
+
+    @ArchTest
+    static final ArchRule Agent不能引用报表内部实现 = noClasses()
+            .that().resideInAPackage("com.iaaops.agent..")
+            .should().dependOnClassesThat().resideInAnyPackage("com.iaaops.reporting.domain..", "com.iaaops.reporting.persistence..", "com.iaaops.reporting.web..");
 
     @ArchTest
     static final ArchRule 持久层不出现在控制器里 = noClasses()

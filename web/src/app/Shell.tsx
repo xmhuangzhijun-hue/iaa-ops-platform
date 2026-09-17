@@ -26,14 +26,15 @@ export function Shell() {
   // 菜单结构由前端维护并按权限裁剪；接口鉴权仍在后端。
   const groups = useMemo(() => visibleMenu(principal.permissions), [principal.permissions]);
   // 直接输入地址也按当前账号裁剪，避免挂载没有权限的页面。
-  const current = findEntry(location.pathname, groups);
+  const current = findEntry(location.pathname, visibleMenu(principal.permissions, true));
+  const isWorkspace = location.pathname === "/workspace";
   const keyword = search.trim().toLowerCase();
 
   return (
     <FilterProvider>
       <PreferencesSync />
       <div className="app-ambient" aria-hidden />
-      <div className="relative flex min-h-dvh">
+      <div className={clsx("relative flex min-h-dvh", isWorkspace && "workspace-shell")}>
         <aside
           className={clsx(
             "glass-sidebar fixed inset-y-0 left-0 z-40 flex w-64 flex-col px-3 py-4 transition-transform duration-200",
@@ -52,7 +53,7 @@ export function Shell() {
             </span>
             <div className="min-w-0">
               <p className="truncate text-sm font-semibold">IAA 运营中台</p>
-              <p className="truncate text-xs text-[var(--sidebar-muted)]">v1 演示 · 全部为虚构数据</p>
+              <p className="truncate text-xs text-[var(--sidebar-muted)]">虚构数据 · 本地模拟执行</p>
             </div>
             <button type="button" className="ml-auto lg:hidden" onClick={() => setDrawerOpen(false)} aria-label="关闭导航">
               <X className="size-5" />
@@ -137,7 +138,7 @@ export function Shell() {
             </div>
           </header>
 
-          <main className="mx-auto w-full max-w-[1680px] flex-1 px-4 py-5 lg:px-6">
+          <main className={isWorkspace ? "workspace-main" : "mx-auto w-full max-w-[1680px] flex-1 px-4 py-5 lg:px-6"}>
             {current || location.pathname === "/" ? (
               <Outlet />
             ) : (

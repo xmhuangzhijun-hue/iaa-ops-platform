@@ -50,6 +50,12 @@ management:
 app:
   environment: ${APP_ENV:development}
   version: 1.0.0-rc.1
+  cors:
+    allowed-origins: ${IAA_ALLOWED_ORIGINS:http://127.0.0.1:5173,http://localhost:5173}
+  agent:
+    base-url: ${IAA_AGENT_BASE_URL:}
+    model: ${IAA_AGENT_MODEL:deepseek-chat}
+    api-key: ${IAA_AGENT_API_KEY:}
   # 非本机环境必须注入；缺失时启动即失败，不允许静默使用弱密钥。
   jwt-signing-key: ${JWT_SIGNING_KEY:}
   access-token-ttl: 15m

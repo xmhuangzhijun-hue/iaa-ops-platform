@@ -25,6 +25,7 @@ import java.util.Set;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.support.TransactionSynchronization;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
 
@@ -142,12 +143,24 @@ public class AuthService {
 
     @Transactional(readOnly = true)
     public Optional<CurrentUser> loadCurrentUser(String userId) {
-        return users.findById(userId).filter(UserEntity::isActive).map(user -> {
-            List<String> roles = userRoles.findRoles(user.getId());
-            Set<String> permissions = Role.permissionsOf(roles);
-            return new CurrentUser(user.getId(), user.getTenantId(), user.getUsername(), user.getDisplayName(),
-                    roles, permissions, DataScope.fromJson(user.getDataScope()), user.isMustChangePassword());
-        });
+        return users.findById(userId).filter(UserEntity::isActive).map(this::currentUser);
+    }
+
+    /**
+     * Serialize a sensitive operation with changes to the authoritative user row. IAM role updates
+     * flush the user's scope/revision before replacing roles, so this lock also protects that role set.
+     * The caller must retain its transaction through the authorized operation.
+     */
+    @Transactional(propagation = Propagation.MANDATORY)
+    public Optional<CurrentUser> loadCurrentUserForAuthorization(String userId) {
+        return users.lockForAuthorization(userId).filter(UserEntity::isActive).map(this::currentUser);
+    }
+
+    private CurrentUser currentUser(UserEntity user) {
+        List<String> roles = userRoles.findRoles(user.getId());
+        Set<String> permissions = Role.permissionsOf(roles);
+        return new CurrentUser(user.getId(), user.getTenantId(), user.getUsername(), user.getDisplayName(),
+                roles, permissions, DataScope.fromJson(user.getDataScope()), user.isMustChangePassword());
     }
 
     private Tokens issue(UserEntity user, OffsetDateTime now) {

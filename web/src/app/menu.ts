@@ -8,6 +8,8 @@ export type MenuEntry = {
   route: string;
   /** 需要的权限之一；留空表示登录即可见 */
   requires?: string[];
+  /** 可直接复核的既有页面，不占用工作台导航。 */
+  hidden?: boolean;
 };
 
 export type MenuGroup = { title: string; items: MenuEntry[] };
@@ -17,12 +19,16 @@ const REAL_METRICS = ["metrics.real"];
 
 export const MENU: MenuGroup[] = [
   {
-    title: "看盘分析",
+    title: "工作空间",
+    items: [{ id: "workspace", title: "运营工作台", route: "/workspace", requires: DASHBOARD }],
+  },
+  {
+    title: "数据",
     items: [
-      { id: "report-aggregate", title: "聚合看盘", route: "/analysis/aggregate", requires: DASHBOARD },
-      { id: "report-daily", title: "分天明细", route: "/analysis/daily", requires: DASHBOARD },
-      { id: "report-trend", title: "趋势图", route: "/analysis/trend", requires: REAL_METRICS },
-      { id: "roi-anomalies", title: "ROI 异常清单", route: "/analysis/roi-anomalies", requires: REAL_METRICS },
+      { id: "report-aggregate", title: "聚合看盘", route: "/analysis/aggregate", requires: DASHBOARD, hidden: true },
+      { id: "report-daily", title: "分天明细", route: "/analysis/daily", requires: DASHBOARD, hidden: true },
+      { id: "report-trend", title: "趋势图", route: "/analysis/trend", requires: REAL_METRICS, hidden: true },
+      { id: "roi-anomalies", title: "ROI 异常清单", route: "/analysis/roi-anomalies", requires: REAL_METRICS, hidden: true },
       { id: "raw-detail", title: "原始明细", route: "/analysis/raw", requires: REAL_METRICS },
     ],
   },
@@ -38,11 +44,11 @@ export const MENU: MenuGroup[] = [
   },
 ];
 
-export function visibleMenu(permissions: string[]): MenuGroup[] {
+export function visibleMenu(permissions: string[], includeHidden = false): MenuGroup[] {
   const granted = new Set(permissions);
   const allowed = (entry: MenuEntry) =>
     !entry.requires || granted.has("*") || entry.requires.some((permission) => granted.has(permission));
-  return MENU.map((group) => ({ ...group, items: group.items.filter(allowed) })).filter((group) => group.items.length);
+  return MENU.map((group) => ({ ...group, items: group.items.filter((entry) => allowed(entry) && (includeHidden || !entry.hidden)) })).filter((group) => group.items.length);
 }
 
 export function findEntry(pathname: string, groups: MenuGroup[]): (MenuEntry & { group: string }) | undefined {

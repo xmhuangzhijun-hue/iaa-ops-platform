@@ -1,0 +1,182 @@
+/* 运营 IDE：数据为主，右侧留给有来源的判断和逐项审阅。沿用全局主题。 */
+.workspace-main { min-width: 0; width: 100%; flex: 1; }
+.workspace-shell .glass-sidebar { width: 190px; }
+.workspace-shell .glass-sidebar > div:first-child { gap: 7px; padding-inline: 0; }
+.workspace-shell .glass-sidebar > div:first-child > span { width: 28px; height: 28px; border-radius: 7px; }
+.workspace-shell .glass-sidebar > div:first-child p:last-child { font-size: 10px; }
+.workspace-shell .app-ambient { display: none; }
+.operations-workspace { display: grid; grid-template-columns: minmax(0, 1fr) 398px; height: calc(100dvh - 56px); min-height: 500px; background: var(--panel-strong); }
+.workspace-data { display: flex; flex-direction: column; min-width: 0; overflow: hidden; }
+.workspace-tabs { display: flex; min-height: 43px; border-bottom: 1px solid var(--line); background: var(--bg); align-items: stretch; }
+.workspace-tabs button { display: flex; align-items: center; gap: 7px; padding: 0 15px; border-right: 1px solid var(--line); border-top: 2px solid transparent; font-size: 12px; color: var(--muted); white-space: nowrap; }
+.workspace-tabs button[aria-pressed="true"] { border-top-color: var(--accent); background: var(--panel-strong); color: var(--text); }
+.workspace-tabs small { font-size: 10px; border-radius: 4px; background: var(--primary-soft); padding: 0 4px; }
+.workspace-mode { margin: auto 12px auto auto; font: 9px/1.2 "Cascadia Code", Consolas, monospace; letter-spacing: .08em; color: var(--muted); }
+.workspace-data-content { padding: 12px; overflow: auto; flex: 1; min-height: 0; }
+.workspace-data-content > .space-y-4 { --tw-space-y-reverse: 0; }
+.workspace-data-content .card { border-radius: 5px; box-shadow: none; backdrop-filter: none; }
+.workspace-data-content .control, .workspace-data-content .btn-primary { min-height: 29px; font-size: 12px; border-radius: 5px; padding-inline: 8px; box-shadow: none; }
+.workspace-data-content input.pl-8 { padding-left: 2rem; }
+.workspace-data-content .chip { min-height: 25px; font-size: 11px; border-radius: 4px; padding-inline: 7px; }
+.workspace-data-content .grid-host { padding: 8px; }
+.workspace-data-content form[aria-label="筛选条件"] { gap: 8px; padding: 9px; }
+.workspace-data-content form[aria-label="筛选条件"] input[type="date"] { max-width: 126px; }
+.workspace-data-toolbar { display: flex; justify-content: space-between; align-items: center; gap: 10px; min-height: 30px; margin-bottom: 12px; font-size: 11px; color: var(--muted); }
+.workspace-data-toolbar strong { color: var(--text); font-size: 12px; }
+.workspace-scope-note { margin: 0 0 12px; font-size: 12px; line-height: 1.7; color: var(--muted); }
+.workspace-statusbar { min-height: 27px; padding: 4px 12px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 4px 10px; font-size: 10px; color: var(--muted); border-top: 1px solid var(--line); background: var(--bg); }
+.workspace-statusbar > span { display: inline-flex; align-items: center; gap: 6px; }
+.workspace-status-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--accent); }
+.workspace-mobile-switch { display: none; }
+.workspace-icon-button { width: 26px; height: 27px; border: 1px solid transparent; border-radius: 4px; display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.workspace-icon-button:hover { background: var(--primary-soft); border-color: var(--line); }
+.workspace-state { min-height: 180px; padding: 35px 18px; display: flex; flex-direction: column; gap: 12px; align-items: center; justify-content: center; text-align: center; color: var(--muted); font-size: 13px; }
+.workspace-state strong { color: var(--text); font-size: 15px; font-weight: 500; }
+.campaign-table-wrap { border: 1px solid var(--line); border-radius: 5px; overflow: auto; }
+.campaign-table { width: 100%; border-collapse: collapse; font-size: 12px; white-space: nowrap; }
+.campaign-table th, .campaign-table td { padding: 11px 10px; border-bottom: 1px solid var(--line); text-align: left; }
+.campaign-table thead { color: var(--muted); background: var(--bg); font-size: 11px; }
+.campaign-table thead th { font-weight: 500; }
+.campaign-table tbody th { font-weight: 500; }
+.campaign-table tbody th small { display: block; color: var(--muted); font-weight: 400; font-size: 10px; margin-top: 4px; }
+.campaign-table tbody tr:nth-child(even) { background: var(--row-alt); }
+.campaign-table tbody tr[data-selected="true"] { background: var(--primary-soft); }
+.campaign-table td:nth-child(4), .campaign-table td:nth-child(5) { font-family: "Cascadia Code", Consolas, monospace; font-variant-numeric: tabular-nums; }
+.campaign-table input[type="checkbox"] { accent-color: var(--accent); width: 14px; height: 14px; }
+.workspace-table-footer { display: flex; justify-content: space-between; gap: 8px; margin-top: 10px; font-size: 11px; color: var(--muted); }
+.workspace-table-footer button { color: var(--accent); text-decoration: underline; text-underline-offset: 3px; }
+.agent-dock { display: flex; flex-direction: column; min-height: 0; overflow: hidden; border-left: 1px solid var(--line); background: color-mix(in srgb, var(--panel-strong) 95%, var(--bg)); }
+.agent-dock-header { display: flex; align-items: center; min-height: 43px; gap: 7px; padding: 0 12px; border-bottom: 1px solid var(--line); }
+.agent-dock-header h2 { font-size: 12px; font-weight: 600; white-space: nowrap; }
+.agent-dock-model { margin-left: auto; min-width: 0; max-width: 115px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font: 10px "Cascadia Code", Consolas, monospace; color: var(--muted); }
+.agent-run-content { flex: 1; min-height: 0; overflow: auto; padding: 17px 15px 20px; scrollbar-width: thin; }
+.agent-section-label { font-size: 10px; color: var(--muted); line-height: 1.6; }
+.agent-empty { padding-top: 32px; }
+.agent-empty h3 { margin: 12px 0; font-size: 18px; letter-spacing: -.03em; font-weight: 600; line-height: 1.6; }
+.agent-empty > p:not(.agent-section-label) { font-size: 12px; line-height: 1.9; color: var(--muted); }
+.agent-empty > small { display: block; color: var(--muted); font-size: 10px; line-height: 1.7; }
+.agent-prompts { margin: 25px 0 16px; display: grid; gap: 7px; }
+.agent-prompts button { display: flex; justify-content: space-between; gap: 8px; align-items: center; padding: 10px; text-align: left; border: 1px solid var(--line); border-radius: 5px; font-size: 11px; line-height: 1.7; }
+.agent-prompts button:hover { background: var(--primary-soft); }
+.agent-prompts svg { flex-shrink: 0; color: var(--muted); }
+.agent-notice { padding: 12px; margin-bottom: 16px; border: 1px solid var(--line); border-left: 3px solid var(--warn); border-radius: 4px; font-size: 12px; line-height: 1.7; }
+.agent-notice p { margin: 6px 0 10px; color: var(--muted); }
+.agent-dock .control, .agent-dock .btn-primary { min-height: 30px; border-radius: 5px; font-size: 11px; padding-inline: 10px; box-shadow: none; }
+.agent-user-message { margin: 0 0 15px; padding: 11px 12px; border: 1px solid var(--line); border-radius: 5px; background: var(--row-alt); }
+.agent-user-message p { font-size: 12px; line-height: 1.85; margin-top: 4px; white-space: pre-wrap; overflow-wrap: anywhere; }
+.agent-run-status { display: flex; align-items: center; gap: 6px; font-size: 11px; margin-bottom: 10px; color: var(--muted); }
+.agent-run-status time { margin-left: auto; font-variant-numeric: tabular-nums; }
+.agent-events { border-left: 1px solid var(--line); margin-left: 5px; padding-left: 9px; }
+.agent-event { display: flex; align-items: flex-start; gap: 6px; width: 100%; text-align: left; padding: 8px 2px; }
+.agent-event:hover { color: var(--accent); }
+.agent-event > svg { margin-top: 3px; flex-shrink: 0; }
+.agent-event > svg:last-child { margin-left: auto; }
+.agent-event-index { font: 10px/1.9 "Cascadia Code", Consolas, monospace; color: var(--accent); }
+.agent-event strong { display: block; font-size: 10px; font-family: "Cascadia Code", Consolas, monospace; font-weight: 500; }
+.agent-event small { display: block; font-size: 11px; line-height: 1.6; color: var(--muted); margin-top: 3px; overflow-wrap: anywhere; }
+.agent-running-note, .agent-loading { font-size: 11px; line-height: 1.8; color: var(--muted); margin: 12px 0; }
+.agent-loading { display: flex; gap: 7px; align-items: center; }
+.agent-answer { margin: 19px 0; }
+.agent-answer > p { white-space: pre-wrap; overflow-wrap: anywhere; line-height: 1.95; font-size: 12px; margin-top: 7px; }
+.agent-markdown { font-size: 12px; line-height: 1.9; overflow-wrap: anywhere; margin-top: 7px; }
+.agent-markdown > :first-child { margin-top: 0; }
+.agent-markdown > :last-child { margin-bottom: 0; }
+.agent-markdown p, .agent-markdown ul, .agent-markdown ol, .agent-markdown blockquote, .agent-markdown pre { margin: 10px 0; }
+.agent-markdown h1, .agent-markdown h2, .agent-markdown h3, .agent-markdown h4 { font-weight: 650; line-height: 1.65; margin: 17px 0 8px; }
+.agent-markdown h1 { font-size: 16px; }
+.agent-markdown h2 { font-size: 14px; }
+.agent-markdown h3, .agent-markdown h4 { font-size: 12px; }
+.agent-markdown ul { list-style: disc; padding-left: 19px; }
+.agent-markdown ol { list-style: decimal; padding-left: 20px; }
+.agent-markdown li { padding-left: 2px; margin: 5px 0; }
+.agent-markdown li > p { margin: 3px 0; }
+.agent-markdown a { color: var(--accent); text-decoration: underline; text-underline-offset: 3px; }
+.agent-markdown strong { font-weight: 650; }
+.agent-markdown blockquote { border-left: 2px solid var(--line); padding-left: 10px; color: var(--muted); }
+.agent-markdown code { font: 11px/1.8 "Cascadia Code", Consolas, monospace; background: var(--row-alt); padding: 1px 3px; border-radius: 3px; }
+.agent-markdown pre { border: 1px solid var(--line); border-radius: 4px; background: var(--bg); padding: 10px; white-space: pre-wrap; overflow-wrap: anywhere; }
+.agent-markdown pre code { background: transparent; padding: 0; white-space: inherit; }
+.agent-markdown hr { border: 0; border-top: 1px solid var(--line); margin: 17px 0; }
+.agent-markdown-table { overflow-x: auto; max-width: 100%; margin: 12px 0; border: 1px solid var(--line); border-radius: 4px; }
+.agent-markdown-table table { border-collapse: collapse; min-width: 100%; font-size: 11px; line-height: 1.7; }
+.agent-markdown-table th, .agent-markdown-table td { padding: 7px 9px; text-align: left; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); min-width: 70px; }
+.agent-markdown-table th { font-weight: 600; background: var(--bg); white-space: nowrap; }
+.agent-markdown-table td { font-variant-numeric: tabular-nums; }
+.agent-markdown-table tr:last-child td { border-bottom: 0; }
+.agent-markdown-table th:last-child, .agent-markdown-table td:last-child { border-right: 0; }
+.agent-image-omitted { color: var(--muted); font-size: 11px; }
+.agent-evidence-links { display: flex; flex-wrap: wrap; gap: 6px 12px; margin-top: 10px; }
+.agent-evidence-links button { font-size: 10px; color: var(--accent); text-underline-offset: 3px; text-decoration: underline; }
+.agent-run-error { font-size: 12px; color: var(--bad); line-height: 1.8; padding: 10px 0; overflow-wrap: anywhere; }
+.agent-proposal { margin-top: 16px; border: 1px solid color-mix(in srgb, var(--accent) 45%, var(--line)); border-radius: 5px; overflow: hidden; padding: 11px; }
+.agent-proposal-heading { display: flex; gap: 8px; align-items: center; justify-content: space-between; font-size: 12px; }
+.agent-proposal-heading span { font-size: 9px; color: var(--accent); background: var(--primary-soft); padding: 2px 5px; border-radius: 3px; }
+.agent-proposal > p { font-size: 11px; line-height: 1.8; margin: 9px 0; }
+.agent-proposal > small { display: block; margin-top: 7px; font-size: 10px; line-height: 1.8; color: var(--muted); }
+.agent-proposal-boundary { color: var(--muted); }
+.agent-decision { display: flex; justify-content: flex-end; flex-wrap: wrap; gap: 7px; margin-top: 12px; }
+.change-diff { display: grid; gap: 10px; }
+.change-file { border: 1px solid var(--line); border-radius: 4px; overflow: hidden; }
+.change-file header { padding: 8px; background: var(--bg); }
+.change-file header strong { display: block; font-size: 11px; font-weight: 600; }
+.change-file header span { display: block; font-size: 9px; line-height: 1.7; color: var(--muted); margin-top: 3px; }
+.change-file table { width: 100%; border-collapse: collapse; font-size: 10px; }
+.change-file th, .change-file td { text-align: right; padding: 7px 6px; border-top: 1px solid var(--line); }
+.change-file th:first-child { text-align: left; }
+.change-file th { color: var(--muted); font-weight: 400; }
+.change-file td { font-family: "Cascadia Code", Consolas, monospace; font-variant-numeric: tabular-nums; }
+.diff-before { background: color-mix(in srgb, var(--bad) 9%, transparent); color: var(--bad); text-decoration: line-through; text-decoration-color: color-mix(in srgb, var(--bad) 45%, transparent); }
+.diff-after { background: color-mix(in srgb, var(--good) 11%, transparent); color: var(--good); }
+.agent-receipt { display: flex; gap: 8px; margin: 16px 0; color: var(--good); font-size: 11px; }
+.agent-receipt svg { flex-shrink: 0; }
+.agent-receipt p { color: var(--muted); line-height: 1.7; margin: 5px 0; }
+.agent-receipt code { overflow-wrap: anywhere; font-size: 9px; color: var(--muted); }
+.agent-composer { margin: 0 12px 12px; padding: 9px 10px 7px; border: 1px solid var(--line); border-radius: 6px; background: var(--panel-strong); }
+.agent-composer:focus-within { border-color: var(--accent); }
+.agent-context { display: flex; flex-wrap: wrap; gap: 5px; align-items: center; font-size: 9px; color: var(--muted); margin-bottom: 9px; font-variant-numeric: tabular-nums; }
+.agent-context svg { color: var(--accent); }
+.agent-composer textarea { width: 100%; display: block; font-size: 12px; line-height: 1.8; resize: vertical; max-height: 160px; min-height: 62px; background: transparent; border: none; }
+.agent-composer textarea:focus-visible { outline-offset: 4px; }
+.agent-composer textarea::placeholder { color: var(--muted); }
+.agent-composer-footer { display: flex; align-items: center; justify-content: space-between; gap: 10px; font-size: 9px; color: var(--muted); margin-top: 6px; }
+.agent-send { width: 27px; height: 27px; border-radius: 5px; display: grid; place-items: center; background: var(--accent); color: var(--panel-strong); }
+.agent-send:disabled { opacity: .35; cursor: not-allowed; }
+.agent-history { max-height: 230px; overflow: auto; padding: 12px; border-bottom: 1px solid var(--line); }
+.agent-history > p { font-size: 11px; color: var(--muted); margin-top: 10px; }
+.agent-history > button { display: block; width: 100%; text-align: left; border-bottom: 1px solid var(--line); padding: 9px 0; }
+.agent-history > button span { font-size: 11px; display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.agent-history > button small { font-size: 9px; color: var(--muted); display: block; margin-top: 4px; }
+.agent-history > button[aria-current="true"] { color: var(--accent); }
+.receipt-list { display: grid; gap: 18px; }
+.receipt-item { padding: 13px; border: 1px solid var(--line); border-radius: 5px; }
+.receipt-item > header { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 7px; margin-bottom: 12px; font-size: 12px; }
+.receipt-item > header strong { color: var(--good); }
+.receipt-item > header time { font-size: 10px; color: var(--muted); }
+.receipt-item > footer { display: flex; flex-wrap: wrap; gap: 8px; font-size: 9px; color: var(--muted); margin-top: 12px; }
+.receipt-item .change-diff { grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr)); }
+.evidence-detail { font-size: 12px; }
+.evidence-detail dl { display: grid; grid-template-columns: 80px minmax(0, 1fr); gap: 8px 15px; }
+.evidence-detail dt { color: var(--muted); }
+.evidence-detail dd { overflow-wrap: anywhere; }
+.evidence-detail > p { margin-top: 20px; line-height: 1.8; }
+.evidence-detail h3 { margin: 25px 0 10px; font-weight: 600; }
+.evidence-detail pre { overflow: auto; max-height: 50dvh; border: 1px solid var(--line); background: var(--bg); padding: 12px; border-radius: 5px; font: 11px/1.8 "Cascadia Code", Consolas, monospace; }
+@media (max-width: 1190px) {
+  .operations-workspace { grid-template-columns: minmax(0, 1fr) 355px; }
+  .workspace-shell .glass-sidebar { width: 176px; padding-inline: 8px; }
+  .workspace-tabs button { padding-inline: 10px; }
+  .workspace-mode { display: none; }
+}
+@media (max-width: 900px) {
+  .operations-workspace { grid-template-columns: minmax(0, 1fr); grid-template-rows: 36px minmax(0, 1fr); }
+  .workspace-mobile-switch { display: flex; border-bottom: 1px solid var(--line); background: var(--bg); }
+  .workspace-mobile-switch button { display: flex; justify-content: center; gap: 6px; align-items: center; flex: 1; font-size: 12px; color: var(--muted); }
+  .workspace-mobile-switch button[aria-pressed="true"] { color: var(--accent); background: var(--primary-soft); }
+  .operations-workspace[data-mobile-pane="data"] .agent-dock, .operations-workspace[data-mobile-pane="assistant"] .workspace-data { display: none; }
+  .agent-dock { border-left: none; }
+  .agent-dock-model { max-width: 180px; }
+  .agent-empty { max-width: 500px; margin-inline: auto; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .operations-workspace .animate-spin { animation: none; }
+}

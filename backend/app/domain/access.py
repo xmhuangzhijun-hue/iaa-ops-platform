@@ -18,9 +18,9 @@ ROLE_PERMISSIONS: dict[str, frozenset[str]] = {
     "super_admin": frozenset({ALL}),
     "company_admin": frozenset({
         "dashboard.read", "metrics.real", "users.team.manage",
-        "mappings.manage", "imports.manage", "audit.read",
+        "mappings.manage", "imports.manage", "audit.read", "agent.execute",
     }),
-    "operator": frozenset({"dashboard.read", "metrics.real"}),
+    "operator": frozenset({"dashboard.read", "metrics.real", "agent.execute"}),
     "agency_admin": frozenset({"dashboard.read", "metrics.external", "users.agency.manage"}),
     "customer": frozenset({"dashboard.read", "metrics.external"}),
     "readonly": frozenset({"dashboard.read"}),

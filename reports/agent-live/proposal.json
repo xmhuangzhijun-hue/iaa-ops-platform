@@ -1,0 +1,201 @@
+{
+  "scenario": "proposal",
+  "real_model": true,
+  "model": "deepseek-chat",
+  "data": "synthetic",
+  "execution": "local sandbox only",
+  "approved": true,
+  "observed_at": "2026-09-17T18:05:01.562778+00:00",
+  "elapsed_seconds": 4.3,
+  "passed": true,
+  "checks": {
+    "terminal": true,
+    "provider_failed": false,
+    "unchanged_before_approval": true,
+    "awaiting_confirmation": true,
+    "exact_requested_change": true,
+    "executed": true,
+    "approved_values_persisted": true,
+    "duplicate_returns_same_receipt": true
+  },
+  "run": {
+    "id": "run_77taedv4v26n",
+    "prompt": "把选中计划 步数宝 · plan-003 的日预算调整为 2600.00 元，出价保持不变。先给我看具体修改，我确认后再执行。",
+    "status": "succeeded",
+    "answer": "已生成提案（未执行，等待你批准）。\n\n**修改内容**（提案 prp_vekkqd7b8f99，状态 pending）[E2]\n\n| 项目 | 当前值 | 修改后 |\n|---|---|---|\n| 计划 | 步数宝 · plan-003（demo_plan_003，huawei / huawei-demo-003）[E1] | 同左 |\n| 日预算 | 2500.00 元 | **2600.00 元** |\n| 出价 | 1.50 元 | 1.50 元（不变） |\n| 当前版本 revision | 1 | 1（提案基于此版本） |\n\n说明与提示：\n- 事实：该计划当前 bid=1.50、daily_budget=2500.00、revision=1，执行模式为 sandbox [E1]。\n- 事实：提案有效期至 2026-09-17T18:34:59Z [E2]；本机 sandbox 配置，未连接任何广告媒体平台，工具无执行权限，需你点击批准后才会生效。\n- 建议：如需评估这次 +100 元（+4%）预算上调是否合理，可先看该计划近 7 天（2026-09-11~09-17）的消耗/预算利用率与 ROI 表现；需要的话我可以查一下再决定是否批准。",
+    "error": null,
+    "events": [
+      {
+        "id": "E1",
+        "tool": "list_campaigns",
+        "status": "succeeded",
+        "summary": "工具已返回结果",
+        "arguments": {},
+        "result": {
+          "items": [
+            {
+              "id": "demo_plan_003",
+              "bid": 1.5,
+              "name": "步数宝 · plan-003",
+              "media": "huawei",
+              "agency": "青橙代理",
+              "account": "huawei-demo-003",
+              "product": "步数宝",
+              "campaign": "plan-003",
+              "operator": "运营甲",
+              "revision": 1,
+              "daily_budget": 2500.0,
+              "execution_mode": "sandbox"
+            },
+            {
+              "id": "demo_plan_004",
+              "bid": 1.6,
+              "name": "脑力答题王 · plan-004",
+              "media": "xiaomi",
+              "agency": "星河代理",
+              "account": "xiaomi-demo-004",
+              "product": "脑力答题王",
+              "campaign": "plan-004",
+              "operator": "运营甲",
+              "revision": 1,
+              "daily_budget": 3000.0,
+              "execution_mode": "sandbox"
+            },
+            {
+              "id": "demo_plan_005",
+              "bid": 1.2,
+              "name": "萌宠消消乐 · plan-005",
+              "media": "vivo",
+              "agency": "蓝鲸代理",
+              "account": "vivo-demo-005",
+              "product": "萌宠消消乐",
+              "campaign": "plan-005",
+              "operator": "运营甲",
+              "revision": 1,
+              "daily_budget": 3500.0,
+              "execution_mode": "sandbox"
+            },
+            {
+              "id": "demo_plan_011",
+              "bid": 1.3,
+              "name": "步数宝 · plan-011",
+              "media": "huawei",
+              "agency": "蓝鲸代理",
+              "account": "huawei-demo-011",
+              "product": "步数宝",
+              "campaign": "plan-011",
+              "operator": "运营甲",
+              "revision": 1,
+              "daily_budget": 3500.0,
+              "execution_mode": "sandbox"
+            },
+            {
+              "id": "demo_plan_033",
+              "bid": 1.5,
+              "name": "每日菜谱 · plan-033",
+              "media": "vivo",
+              "agency": "青橙代理",
+              "account": "vivo-demo-033",
+              "product": "每日菜谱",
+              "campaign": "plan-033",
+              "operator": "运营甲",
+              "revision": 1,
+              "daily_budget": 2500.0,
+              "execution_mode": "sandbox"
+            }
+          ]
+        },
+        "created_at": "2026-09-17T18:04:58.0784235Z"
+      },
+      {
+        "id": "E2",
+        "tool": "propose_change",
+        "status": "succeeded",
+        "summary": "工具已返回结果",
+        "arguments": {
+          "changes": [
+            {
+              "bid": 1.5,
+              "revision": 1,
+              "campaign_id": "demo_plan_003",
+              "daily_budget": 2600
+            }
+          ],
+          "summary": "将「步数宝 · plan-003」(demo_plan_003, huawei / huawei-demo-003) 的日预算由 2500.00 元调整为 2600.00 元，出价保持 1.50 元不变。仅预算变更，未执行，待用户批准。"
+        },
+        "result": {
+          "id": "prp_vekkqd7b8f99",
+          "status": "pending",
+          "changes": [
+            {
+              "after": {
+                "bid": 1.5,
+                "daily_budget": 2600.0
+              },
+              "before": {
+                "bid": 1.5,
+                "daily_budget": 2500.0
+              },
+              "account": "huawei-demo-003",
+              "revision": 1,
+              "campaign_id": "demo_plan_003",
+              "campaign_name": "步数宝 · plan-003"
+            }
+          ],
+          "summary": "将「步数宝 · plan-003」(demo_plan_003, huawei / huawei-demo-003) 的日预算由 2500.00 元调整为 2600.00 元，出价保持 1.50 元不变。仅预算变更，未执行，待用户批准。",
+          "expires_at": "2026-09-17T18:34:59.077735Z"
+        },
+        "created_at": "2026-09-17T18:04:59.1090046Z"
+      }
+    ],
+    "proposal": {
+      "id": "prp_vekkqd7b8f99",
+      "status": "approved",
+      "summary": "将「步数宝 · plan-003」(demo_plan_003, huawei / huawei-demo-003) 的日预算由 2500.00 元调整为 2600.00 元，出价保持 1.50 元不变。仅预算变更，未执行，待用户批准。",
+      "changes": [
+        {
+          "campaign_id": "demo_plan_003",
+          "campaign_name": "步数宝 · plan-003",
+          "account": "huawei-demo-003",
+          "revision": 1,
+          "before": {
+            "bid": 1.5,
+            "daily_budget": 2500.0
+          },
+          "after": {
+            "bid": 1.5,
+            "daily_budget": 2600.0
+          }
+        }
+      ],
+      "expires_at": "2026-09-17T18:34:59.077735Z"
+    },
+    "receipt": {
+      "id": "rcp_4ngfvjuz332a",
+      "run_id": "run_77taedv4v26n",
+      "proposal_id": "prp_vekkqd7b8f99",
+      "execution_mode": "sandbox",
+      "status": "executed",
+      "changes": [
+        {
+          "campaign_id": "demo_plan_003",
+          "campaign_name": "步数宝 · plan-003",
+          "account": "huawei-demo-003",
+          "revision": 1,
+          "before": {
+            "bid": 1.5,
+            "daily_budget": 2500.0
+          },
+          "after": {
+            "bid": 1.5,
+            "daily_budget": 2600.0
+          },
+          "new_revision": 2
+        }
+      ],
+      "created_at": "2026-09-17T18:05:01.54796Z"
+    },
+    "created_at": "2026-09-17T18:04:57.325693Z",
+    "finished_at": "2026-09-17T18:05:01.576251Z"
+  }
+}

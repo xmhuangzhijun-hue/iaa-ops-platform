@@ -427,6 +427,109 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/agent/capabilities": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** 查询助手可用状态 */
+        get: operations["getAgentCapabilities"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/agent/campaigns": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** 查询授权范围内的虚构计划 */
+        get: operations["listAgentCampaigns"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/agent/runs": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** 查询本人运行记录 */
+        get: operations["listAgentRuns"];
+        put?: never;
+        /** 提交模型任务 */
+        post: operations["createAgentRun"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/agent/runs/{run_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** 回读本人任务和证据 */
+        get: operations["getAgentRun"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/agent/runs/{run_id}/decision": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** 确认或拒绝具体沙箱变更 */
+        post: operations["decideAgentRun"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/agent/receipts": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** 查询本人沙箱执行回执 */
+        get: operations["listAgentReceipts"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -1127,6 +1230,206 @@ export interface components {
             data_scope: components["schemas"]["DataScope"];
             /** Revision */
             revision: number;
+        };
+        /** AgentSubmit */
+        AgentSubmit: {
+            /** Prompt */
+            prompt: string;
+            /** Request Id */
+            request_id: string;
+            /**
+             * Context
+             * @default null
+             */
+            context: {
+                [key: string]: unknown;
+            } | null;
+        };
+        /** AgentDecision */
+        AgentDecision: {
+            /** Approve */
+            approve: boolean;
+            /** Request Id */
+            request_id: string;
+            /** Proposal Id */
+            proposal_id: string;
+        };
+        /** AgentCapabilities */
+        AgentCapabilities: {
+            /** Available */
+            available: boolean;
+            /** Model */
+            model: string | null;
+            /** Unavailable Reason */
+            unavailable_reason: string | null;
+            /** Can Execute */
+            can_execute: boolean;
+            /** Execution Mode */
+            execution_mode: string;
+            /** Max Steps */
+            max_steps: number;
+        };
+        /** AgentCampaign */
+        AgentCampaign: {
+            /** Id */
+            id: string;
+            /** Name */
+            name: string;
+            /** Media */
+            media: string;
+            /** Account */
+            account: string;
+            /** Campaign */
+            campaign: string;
+            /** Agency */
+            agency: string | null;
+            /** Product */
+            product: string | null;
+            /** Operator */
+            operator: string | null;
+            /** Bid */
+            bid: number;
+            /** Daily Budget */
+            daily_budget: number;
+            /** Revision */
+            revision: number;
+            /** Execution Mode */
+            execution_mode: string;
+        };
+        /** AgentCampaignList */
+        AgentCampaignList: {
+            /** Items */
+            items: components["schemas"]["AgentCampaign"][];
+        };
+        /** AgentAmounts */
+        AgentAmounts: {
+            /** Bid */
+            bid: number;
+            /** Daily Budget */
+            daily_budget: number;
+        };
+        /** AgentAppliedChange */
+        AgentAppliedChange: {
+            /** Campaign Id */
+            campaign_id: string;
+            /** Campaign Name */
+            campaign_name: string;
+            /** Account */
+            account: string;
+            /** Revision */
+            revision: number;
+            before: components["schemas"]["AgentAmounts"];
+            after: components["schemas"]["AgentAmounts"];
+            /** New Revision */
+            new_revision: number;
+        };
+        /** AgentChange */
+        AgentChange: {
+            /** Campaign Id */
+            campaign_id: string;
+            /** Campaign Name */
+            campaign_name: string;
+            /** Account */
+            account: string;
+            /** Revision */
+            revision: number;
+            before: components["schemas"]["AgentAmounts"];
+            after: components["schemas"]["AgentAmounts"];
+        };
+        /** AgentEvent */
+        AgentEvent: {
+            /** Id */
+            id: string;
+            /** Tool */
+            tool: string;
+            /** Status */
+            status: string;
+            /** Summary */
+            summary: string;
+            /** Arguments */
+            arguments: {
+                [key: string]: unknown;
+            };
+            /** Result */
+            result: unknown;
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+        };
+        /** AgentProposal */
+        AgentProposal: {
+            /** Id */
+            id: string;
+            /** Status */
+            status: string;
+            /** Summary */
+            summary: string;
+            /** Changes */
+            changes: components["schemas"]["AgentChange"][];
+            /**
+             * Expires At
+             * Format: date-time
+             */
+            expires_at: string;
+        };
+        /** AgentReceipt */
+        AgentReceipt: {
+            /** Id */
+            id: string;
+            /** Run Id */
+            run_id: string;
+            /** Proposal Id */
+            proposal_id: string;
+            /** Execution Mode */
+            execution_mode: string;
+            /** Status */
+            status: string;
+            /** Changes */
+            changes: components["schemas"]["AgentAppliedChange"][];
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+        };
+        /** AgentRun */
+        AgentRun: {
+            /** Id */
+            id: string;
+            /** Prompt */
+            prompt: string;
+            /**
+             * Status
+             * @enum {string}
+             */
+            status: "running" | "awaiting_confirmation" | "succeeded" | "rejected" | "failed";
+            /** Answer */
+            answer: string | null;
+            /** Error */
+            error: string | null;
+            /** Events */
+            events: components["schemas"]["AgentEvent"][];
+            proposal: components["schemas"]["AgentProposal"] | null;
+            receipt: components["schemas"]["AgentReceipt"] | null;
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+            /** Finished At */
+            finished_at: string | null;
+        };
+        /** AgentRunList */
+        AgentRunList: {
+            /** Items */
+            items: components["schemas"]["AgentRun"][];
+        };
+        /** AgentReceiptList */
+        AgentReceiptList: {
+            /** Items */
+            items: components["schemas"]["AgentReceipt"][];
         };
     };
     responses: never;
@@ -2275,6 +2578,536 @@ export interface operations {
             };
             /** @description 请求参数校验失败 */
             422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Error"];
+                };
+            };
+        };
+    };
+    getAgentCapabilities: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description 成功 */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AgentCapabilities"];
+                };
+            };
+            /** @description 登录失效 */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Error"];
+                };
+            };
+            /** @description 无权限或授权已变化 */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Error"];
+                };
+            };
+            /** @description 目标不可见 */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Error"];
+                };
+            };
+            /** @description 请求、状态、版本冲突或任务容量已满 */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Error"];
+                };
+            };
+            /** @description 输入校验失败 */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Error"];
+                };
+            };
+            /** @description 模型接口尚未配置 */
+            501: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Error"];
+                };
+            };
+        };
+    };
+    listAgentCampaigns: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description 成功 */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AgentCampaignList"];
+                };
+            };
+            /** @description 登录失效 */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Error"];
+                };
+            };
+            /** @description 无权限或授权已变化 */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Error"];
+                };
+            };
+            /** @description 目标不可见 */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Error"];
+                };
+            };
+            /** @description 请求、状态、版本冲突或任务容量已满 */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Error"];
+                };
+            };
+            /** @description 输入校验失败 */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Error"];
+                };
+            };
+            /** @description 模型接口尚未配置 */
+            501: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Error"];
+                };
+            };
+        };
+    };
+    listAgentRuns: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description 成功 */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AgentRunList"];
+                };
+            };
+            /** @description 登录失效 */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Error"];
+                };
+            };
+            /** @description 无权限或授权已变化 */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Error"];
+                };
+            };
+            /** @description 目标不可见 */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Error"];
+                };
+            };
+            /** @description 请求、状态、版本冲突或任务容量已满 */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Error"];
+                };
+            };
+            /** @description 输入校验失败 */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Error"];
+                };
+            };
+            /** @description 模型接口尚未配置 */
+            501: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Error"];
+                };
+            };
+        };
+    };
+    createAgentRun: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AgentSubmit"];
+            };
+        };
+        responses: {
+            /** @description 成功 */
+            202: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AgentRun"];
+                };
+            };
+            /** @description 登录失效 */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Error"];
+                };
+            };
+            /** @description 无权限或授权已变化 */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Error"];
+                };
+            };
+            /** @description 目标不可见 */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Error"];
+                };
+            };
+            /** @description 请求、状态、版本冲突或任务容量已满 */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Error"];
+                };
+            };
+            /** @description 输入校验失败 */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Error"];
+                };
+            };
+            /** @description 模型接口尚未配置 */
+            501: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Error"];
+                };
+            };
+        };
+    };
+    getAgentRun: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                run_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description 成功 */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AgentRun"];
+                };
+            };
+            /** @description 登录失效 */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Error"];
+                };
+            };
+            /** @description 无权限或授权已变化 */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Error"];
+                };
+            };
+            /** @description 目标不可见 */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Error"];
+                };
+            };
+            /** @description 请求、状态、版本冲突或任务容量已满 */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Error"];
+                };
+            };
+            /** @description 输入校验失败 */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Error"];
+                };
+            };
+            /** @description 模型接口尚未配置 */
+            501: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Error"];
+                };
+            };
+        };
+    };
+    decideAgentRun: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                run_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AgentDecision"];
+            };
+        };
+        responses: {
+            /** @description 成功 */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AgentRun"];
+                };
+            };
+            /** @description 登录失效 */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Error"];
+                };
+            };
+            /** @description 无权限或授权已变化 */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Error"];
+                };
+            };
+            /** @description 目标不可见 */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Error"];
+                };
+            };
+            /** @description 请求、状态、版本冲突或任务容量已满 */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Error"];
+                };
+            };
+            /** @description 输入校验失败 */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Error"];
+                };
+            };
+            /** @description 模型接口尚未配置 */
+            501: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Error"];
+                };
+            };
+        };
+    };
+    listAgentReceipts: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description 成功 */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AgentReceiptList"];
+                };
+            };
+            /** @description 登录失效 */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Error"];
+                };
+            };
+            /** @description 无权限或授权已变化 */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Error"];
+                };
+            };
+            /** @description 目标不可见 */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Error"];
+                };
+            };
+            /** @description 请求、状态、版本冲突或任务容量已满 */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Error"];
+                };
+            };
+            /** @description 输入校验失败 */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Error"];
+                };
+            };
+            /** @description 模型接口尚未配置 */
+            501: {
                 headers: {
                     [name: string]: unknown;
                 };

@@ -5,8 +5,12 @@ import com.iaaops.shared.error.ErrorResponse;
 // Spring Boot 4 默认 Jackson 3：databind 的包名是 tools.jackson.databind，注解仍在 com.fasterxml.jackson.annotation
 import tools.jackson.databind.ObjectMapper;
 import java.io.IOException;
+import java.net.URI;
 import java.time.Clock;
+import java.util.Arrays;
+import java.util.List;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;
@@ -66,9 +70,23 @@ public class SecurityConfig {
     }
 
     @Bean
-    CorsConfigurationSource corsConfigurationSource() {
+    CorsConfigurationSource corsConfigurationSource(@Value("${app.cors.allowed-origins}") String allowedOrigins) {
+        List<String> origins = Arrays.stream(allowedOrigins.split(",", -1)).map(String::trim).distinct().toList();
+        for (String origin : origins) {
+            try {
+                URI uri = URI.create(origin);
+                if (origin.isBlank() || origin.contains("*") || uri.getHost() == null
+                        || !("http".equals(uri.getScheme()) || "https".equals(uri.getScheme()))
+                        || uri.getUserInfo() != null || uri.getQuery() != null || uri.getFragment() != null
+                        || !uri.getPath().isEmpty() || uri.getPort() > 65535) {
+                    throw new IllegalArgumentException();
+                }
+            } catch (IllegalArgumentException exception) {
+                throw new IllegalArgumentException("app.cors.allowed-origins must contain explicit HTTP(S) origins");
+            }
+        }
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(java.util.List.of("http://127.0.0.1:5173", "http://localhost:5173"));
+        configuration.setAllowedOrigins(origins);
         configuration.setAllowedMethods(java.util.List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(java.util.List.of("*"));
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();

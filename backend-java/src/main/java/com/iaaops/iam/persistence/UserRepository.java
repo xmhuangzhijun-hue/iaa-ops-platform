@@ -1,9 +1,11 @@
 package com.iaaops.iam.persistence;
 
+import jakarta.persistence.LockModeType;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -19,6 +21,10 @@ public interface UserRepository extends JpaRepository<UserEntity, String> {
             """;
 
     Optional<UserEntity> findByUsername(String username);
+
+    @Lock(LockModeType.PESSIMISTIC_READ)
+    @Query("select u from UserEntity u where u.id = :userId")
+    Optional<UserEntity> lockForAuthorization(@Param("userId") String userId);
 
     @Query("select u " + FILTER + " order by u.createdAt desc, u.id")
     List<UserEntity> page(@Param("tenantId") String tenantId, @Param("keyword") String keyword,

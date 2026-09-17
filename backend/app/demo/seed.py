@@ -2,7 +2,7 @@
 
     uv run python -m app.demo.seed --days 60
 
-只写 tenant_demo 租户，并先清空该租户旧数据，可重复执行；production 环境拒绝运行。
+只写 tenant_demo 租户，并先清空该租户旧数据；production 或已有 Agent 数据时拒绝运行。
 """
 
 import argparse
@@ -14,7 +14,7 @@ from datetime import date, timedelta
 from decimal import ROUND_HALF_UP, Decimal
 from typing import Any
 
-from sqlalchemy import delete, insert
+from sqlalchemy import delete, insert, text
 from sqlalchemy.orm import Session
 
 from app.core.config import settings
@@ -117,6 +117,15 @@ def seed(session: Session, *, end: date, days: int, password: str = DEMO_PASSWOR
          random_seed: int = DEFAULT_SEED) -> dict[str, int]:
     if settings.environment == "production":
         raise RuntimeError("拒绝在 production 环境写入演示数据")
+    # Java 的 Agent 状态有独立生命周期，不能让旧种子的租户重置隐式清掉历史。
+    # 先检查表是否存在，以兼容只有冻结 Alembic 迁移的 Python 对照库。
+    for table in ("agent_campaigns", "agent_runs"):
+        exists = session.execute(text("select to_regclass(:name)"), {"name": table}).scalar()
+        if exists is not None and session.execute(text(f"select exists(select 1 from {table})")).scalar():
+            raise RuntimeError(
+                "本库已有 Agent 计划或运行，拒绝重置演示数据；请使用新的空库。"
+                "只补充虚构计划请运行 python -m app.demo.agent_seed；已有数据不会被清空。"
+            )
     rng = random.Random(random_seed)
     accounts = build_accounts(rng)
 

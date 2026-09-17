@@ -20,6 +20,7 @@ CONTRACT = BACKEND.parent / "contracts" / "openapi.json"
 sys.path.insert(0, str(BACKEND))
 
 from app.main import app  # noqa: E402
+from scripts.agent_contract import add_agent_contract  # noqa: E402
 
 
 METHODS = {"get", "post", "put", "patch", "delete"}
@@ -110,6 +111,7 @@ def build_contract() -> dict[str, Any]:
             operation["responses"].pop("501", None)
     if seen != JAVA_OPERATIONS.keys():
         raise ValueError(f"Java 操作缺少契约：{sorted(JAVA_OPERATIONS.keys() - seen)}")
+    add_agent_contract(schema, BACKEND.parent)
     return schema
 
 

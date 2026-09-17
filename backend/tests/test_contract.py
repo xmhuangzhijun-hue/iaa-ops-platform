@@ -58,6 +58,23 @@ def test_schema_literals_follow_domain_registries():
     assert get_args(Role) == ROLES
 
 
+def test_agent_contract_is_java_only_and_traces_real_requirements():
+    java = build_contract()
+    agent = [(path, method, op) for path, item in java["paths"].items()
+             if path.startswith("/api/v1/agent/")
+             for method, op in item.items() if method in METHODS]
+    assert len(agent) == 7
+    requirements = (CONTRACT.parent.parent / "docs/agent/requirements.md").read_text(encoding="utf-8")
+    for path, method, operation in agent:
+        assert path not in app.openapi()["paths"]
+        assert operation["x-reference-implementation"]["status"] == "not_available"
+        assert operation["security"] == [{"bearerAuth": []}]
+        assert all(req in requirements for req in operation["x-requirements"])
+        if method == "post":
+            ref = operation["requestBody"]["content"]["application/json"]["schema"]["$ref"].split("/")[-1]
+            assert java["components"]["schemas"][ref]["additionalProperties"] is False
+
+
 def test_error_codes_form_a_closed_described_set(client):
     code = app.openapi()["components"]["schemas"]["Error"]["properties"]["code"]
     assert set(code["enum"]) == set(code["x-code-descriptions"])

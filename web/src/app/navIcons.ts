@@ -2,10 +2,11 @@ import {
   Ban, Bell, BookOpen, CalendarClock, CalendarDays, CloudDownload, Factory, FileText, Handshake,
   LayoutDashboard, Link2, Megaphone, Package, Percent, PieChart, Receipt, RefreshCcw, ScrollText, Send,
   ShieldAlert, Shuffle, Sigma, SlidersHorizontal, Table, Tag, TrendingUp, TriangleAlert, UsersRound,
-  Users, Wallet, type LucideIcon,
+  Users, Wallet, PanelsTopLeft, type LucideIcon,
 } from "lucide-react";
 
 export const NAV_ICONS: Record<string, LucideIcon> = {
+  workspace: PanelsTopLeft,
   home: LayoutDashboard,
   products: Package,
   categories: Tag,
